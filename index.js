@@ -117,7 +117,7 @@ $(document).ready(function(){
     autoplayHoverPause: true,
     responsive: {
       0: {
-        items: 1.35
+        items: 1.25
       },
       576: {
         items: 1.70
