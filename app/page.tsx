@@ -1157,12 +1157,12 @@ export default function Portfolio() {
     )
 
     // The code below will work after deployment when your CV file exists
-    // const link = document.createElement("a");
-    // link.href = "/cv/Oluwadamisi_Damilola_CV.pdf";
-    // link.download = "Oluwadamisi_Damilola_CV.pdf";
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
+    const link = document.createElement("a");
+    link.href = "/cv/Oluwadamisi_Damilola_CV.pdf";
+    link.download = "Oluwadamisi_Damilola_CV.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
 const frontendSkills = [
