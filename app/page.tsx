@@ -2747,7 +2747,7 @@ const toolsSkills = [
               transition={{ duration: 0.5 }}
               className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500"
             >
-              {"<Deife />"}
+              {"<damisi a new app out here  />"}
             </motion.div>
 
             {/* Desktop Navigation */}
