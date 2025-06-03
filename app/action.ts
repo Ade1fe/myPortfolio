@@ -4,9 +4,9 @@
 
 import { Resend } from "resend"
 
-
-const resend = new Resend(process.env.NEXT_PRIVATE_RESEND_API_KEY);
-
+// Use environment variable for security
+const resend = new Resend(process.env.RESEND_API_KEY || "re_JcwKUHKa_CQGZZJcwcBcwGDnFn1UKjLwo")
+// const resend = new Resend(process.env.RESEND_API_KEY)
 
 type ContactFormData = {
   name: string
@@ -93,7 +93,7 @@ Reply directly to this email to respond to ${data.name}.
     console.log("✅ Email sent successfully via Resend:", emailData)
     return {
       success: true,
-      message: "Thank you! Your message has been sent successfully. I'll get back to you soon! 😊",
+      message: "Thank you! Your message has been sent successfully. I'll get back to you soon! ",
     }
   } catch (error) {
     console.error("❌ Error sending email:", error)
