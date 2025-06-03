@@ -2625,7 +2625,7 @@ const toolsSkills = [
     "A sleek and intuitive Flutter recipe app powered by the MealDB API. Users can browse, search, and view detailed meal recipes with images and instructions. The app uses Firebase for backend integration and GoRouter for seamless navigation.",
   technologies: ["Flutter", "Dart", "MealDB API", "Firebase", "GoRouter"],
   github: "https://github.com/Ade1fe/gomine-food-2.0",
-  demo: "https://demo.com", 
+  demo: "https://drive.google.com/file/d/1G5JwRtUCNM7t87egQcDoGAKM_lwIof3P/view?usp=sharing", 
   image: "/gominefood.png",
   type: "Mobile Application",
   color: "from-green-400 to-emerald-500"
