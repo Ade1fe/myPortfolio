@@ -2531,6 +2531,11 @@ export default function Portfolio() {
     }))
   }
 
+  // feedback-smtp.eu-west-1.amazonses.com
+  // v=spf1 include:amazonses.com ~all
+  // p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDayIw8kAF2wvDyjfrlE5jA9KTQclWhN4+XuyOWgufb4oWL4pWzoaRY9SevXnOxYrpaflWRgWUSP8o/Ee5vfqZioOhgdiTUDVIamP8un8Hl1DSYFBTLDWVA5oLudLVxREokI6SRXPz1bCWd5gbzfxYXJie7Lo3rbtptkrEIJAhZywIDAQAB
+  // v=DMARC1; p=none;
+
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -2564,74 +2569,88 @@ export default function Portfolio() {
     }
   }
 
-  const frontendSkills = [
-    "React.js",
-    "JavaScript",
-    "TypeScript",
-    "HTML5",
-    "CSS3",
-    "Tailwind CSS",
-    "Chakra UI",
-    "Material UI",
-    "Responsive Design",
-  ]
+const frontendSkills = [
+  "React.js",
+  "JavaScript",
+  "TypeScript",
+  "HTML5",
+  "CSS3",
+  "Tailwind CSS",
+  "Chakra UI",
+  "Material UI",
+  "Redux",
+  "React Router",
+  "State Management",
+  "API Integration",
+  "Responsive Web Design",
+  "SEO Best Practices",
+  "Code Review & Collaboration",
+];
 
-  const mobileSkills = [
-    "Flutter",
-    "Dart",
-    "Firebase",
-    "Android Development",
-    "iOS Development",
-    "Cross-platform Development",
-  ]
 
-  const toolsSkills = [
-    "Git",
-    "GitHub",
-    "Visual Studio Code",
-    "Figma",
-    "Firebase Auth",
-    "Firestore",
-    "Node.js",
-    "REST APIs",
-  ]
+const mobileSkills = [
+  "Flutter",
+  "Dart",
+  "Firebase",
+  "Android Development",
+  "iOS Development",
+  "Cross-platform Development",
+  "State Management",
+  "GoRouter",
+  "API Integration",
+  "UI/UX Design",
+  "Responsive Design",
+  // "Version Control (Git)",  
+]
+
+
+const toolsSkills = [
+  "Git & GitHub",
+  "Visual Studio Code",
+  "Figma",
+  "Firebase Auth",
+  "Cloud Firestore",
+  "Node.js",
+  "REST APIs",
+];
 
   const projects = [
-    {
-      title: "React Task Manager",
-      description:
-        "A comprehensive task management SPA built with React, featuring custom hooks, Firebase integration, and optimized performance with 40% reduction in unnecessary re-renders.",
-      technologies: ["React", "Chakra UI", "Firebase", "Custom Hooks"],
-      github: "https://github.com",
-      demo: "https://demo.com",
-      image: "/placeholder.svg?height=200&width=300",
-      type: "Web Application",
-      color: "from-pink-500 to-rose-500",
-    },
-    {
-      title: "Flutter E-Commerce App",
-      description:
-        "Beautiful and responsive e-commerce mobile application with product listings, search filters, shopping cart, and real-time data updates using Firebase.",
-      technologies: ["Flutter", "Dart", "Firebase", "Material Design"],
-      github: "https://github.com",
-      demo: "https://demo.com",
-      image: "/placeholder.svg?height=200&width=300",
-      type: "Mobile Application",
-      color: "from-cyan-500 to-blue-500",
-    },
-    {
-      title: "Personal Portfolio Website",
-      description:
-        "Professional portfolio website showcasing development work with contact form, resume download, and project galleries. Achieving 300+ views per month.",
-      technologies: ["React", "Next.js", "Tailwind CSS", "TypeScript"],
-      github: "https://github.com",
-      demo: "https://demo.com",
-      image: "/placeholder.svg?height=200&width=300",
-      type: "Web Application",
-      color: "from-violet-500 to-purple-500",
-    },
-  ]
+  {
+  title: "Cut2Fit Moda",
+  description:
+    "An elegant e-commerce platform for custom and ready-to-wear fashion pieces. Built with React and Firebase, it features dynamic product listings, role-based dashboards for admins and customers, and seamless cart & checkout functionality. Designed with fashion-forward UI using Chakra UI.",
+  technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
+  github: "https://github.com",
+  demo: "https://cut2fitmoda.com", 
+  image: "/cut2fit.png",
+  type: "Web Application",
+  color: "from-rose-500 to-fuchsia-600",
+},
 
+{
+  title: "Gomine Food",
+  description:
+    "A sleek and intuitive Flutter recipe app powered by the MealDB API. Users can browse, search, and view detailed meal recipes with images and instructions. The app uses Firebase for backend integration and GoRouter for seamless navigation.",
+  technologies: ["Flutter", "Dart", "MealDB API", "Firebase", "GoRouter"],
+  github: "https://github.com/Ade1fe/gomine-food",
+  demo: "https://demo.com", // Replace with actual demo link if available
+  image: "/gominefood.png",
+  type: "Mobile Application",
+  color: "from-green-400 to-emerald-500"
+},
+{
+  title: "Kin – Fintech",
+  description:
+    "A modern and elegant landing page for Kin, a fintech product designed to empower families and loved ones to manage finances, automate payments, and grow wealth together. The site highlights Kin's features, encourages user engagement, and includes a waitlist form to collect early access signups.",
+  technologies: ["React", "Tailwind CSS", "JavaScript", "Responsive Design"],
+  github: "https://github.com", // Replace with actual repo if available
+  demo: "https://demo.com",     // Replace with actual live URL
+  image: "/kin.png",
+  type: "Web Application",
+  color: "from-purple-500 to-pink-500"
+}
+
+  ]
   const experience = [
     {
       title: "Frontend Developer",
@@ -2988,7 +3007,7 @@ export default function Portfolio() {
             <div className="w-20 h-1 bg-gradient-to-r from-pink-500 to-purple-500 mx-auto"></div>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -3002,7 +3021,8 @@ export default function Portfolio() {
                   <img
                     src="/aboutme.jpg"
                     alt="Oluwadamisi Damilola - Frontend & Mobile Developer"
-                    className="w-full max-w-md mx-auto object-cover rounded-lg"
+                    className="w-full mx-auto object-cover rounded-lg"
+                    //  className="w-full h-100 mx-auto object-cover rounded-lg"
                     style={{ aspectRatio: "1/1" }}
                   />
                 </div>
@@ -3043,12 +3063,12 @@ export default function Portfolio() {
               </div>
 
               {/* CV Download in About Section */}
-              <div className="mb-6">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-1  items-start mb-6">
                 <Button
                   onClick={handleDownloadCV}
                   className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white border-0 mr-4"
                 >
-                  <Download className="mr-2" size={16} />
+                  <Download className="mr-2" size={14} />
                   Download Full CV
                 </Button>
                 <Button
@@ -3056,7 +3076,7 @@ export default function Portfolio() {
                   onClick={() => window.open("/cv/Oluwadamisi_Damilola_CV.pdf", "_blank")}
                   className="border-purple-500 text-purple-500 hover:bg-purple-500/10"
                 >
-                  <FileText className="mr-2" size={16} />
+                  <FileText className="mr-2" size={14} />
                   View Online
                 </Button>
               </div>
@@ -3450,7 +3470,7 @@ export default function Portfolio() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 px-4 sm:px-6 lg:px-8">
+      <section id="contact" className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-900/50">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
