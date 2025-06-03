@@ -93,7 +93,7 @@ Reply directly to this email to respond to ${data.name}.
     console.log("✅ Email sent successfully via Resend:", emailData)
     return {
       success: true,
-      message: "Thank you! Your message has been sent successfully. I'll get back to you soon!",
+      message: "Thank you! Your message has been sent successfully. I'll get back to you soon! 😊",
     }
   } catch (error) {
     console.error("❌ Error sending email:", error)
@@ -111,4 +111,3 @@ Reply directly to this email to respond to ${data.name}.
     }
   }
 }
-// Note: Ensure you have the RESEND_API_KEY set in your environment variables for production use.
