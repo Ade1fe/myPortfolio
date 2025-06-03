@@ -2507,19 +2507,15 @@ export default function Portfolio() {
 
   // Function to handle CV download
   const handleDownloadCV = () => {
-    // In a real deployment, this would download your actual CV
-    // For now, we'll show an alert explaining this is a preview
-    alert(
-      "CV download will work after deployment. Add your CV file to public/cv/Oluwadamisi_Damilola_CV.pdf when you deploy the site.",
-    )
+   
 
     // The code below will work after deployment when your CV file exists
-    // const link = document.createElement("a");
-    // link.href = "/cv/Oluwadamisi_Damilola_CV.pdf";
-    // link.download = "Oluwadamisi_Damilola_CV.pdf";
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
+    const link = document.createElement("a");
+    link.href = "/cv/Oluwadamisi_Damilola_CV.pdf";
+    link.download = "Oluwadamisi_Damilola_CV.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   // Handle form input changes
@@ -2530,11 +2526,6 @@ export default function Portfolio() {
       [name]: value,
     }))
   }
-
-  // feedback-smtp.eu-west-1.amazonses.com
-  // v=spf1 include:amazonses.com ~all
-  // p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDayIw8kAF2wvDyjfrlE5jA9KTQclWhN4+XuyOWgufb4oWL4pWzoaRY9SevXnOxYrpaflWRgWUSP8o/Ee5vfqZioOhgdiTUDVIamP8un8Hl1DSYFBTLDWVA5oLudLVxREokI6SRXPz1bCWd5gbzfxYXJie7Lo3rbtptkrEIJAhZywIDAQAB
-  // v=DMARC1; p=none;
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -2620,8 +2611,8 @@ const toolsSkills = [
   description:
     "An elegant e-commerce platform for custom and ready-to-wear fashion pieces. Built with React and Firebase, it features dynamic product listings, role-based dashboards for admins and customers, and seamless cart & checkout functionality. Designed with fashion-forward UI using Chakra UI.",
   technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
-  github: "https://github.com",
-  demo: "https://cut2fitmoda.com", 
+  github: "https://github.com/Ade1fe?tab=repositories",
+  demo: "https://cut2fit-moda.netlify.app", 
   image: "/cut2fit.png",
   type: "Web Application",
   color: "from-rose-500 to-fuchsia-600",
@@ -2632,8 +2623,8 @@ const toolsSkills = [
   description:
     "A sleek and intuitive Flutter recipe app powered by the MealDB API. Users can browse, search, and view detailed meal recipes with images and instructions. The app uses Firebase for backend integration and GoRouter for seamless navigation.",
   technologies: ["Flutter", "Dart", "MealDB API", "Firebase", "GoRouter"],
-  github: "https://github.com/Ade1fe/gomine-food",
-  demo: "https://demo.com", // Replace with actual demo link if available
+  github: "https://github.com/Ade1fe/gomine-food-2.0",
+  demo: "https://demo.com", 
   image: "/gominefood.png",
   type: "Mobile Application",
   color: "from-green-400 to-emerald-500"
@@ -2643,8 +2634,8 @@ const toolsSkills = [
   description:
     "A modern and elegant landing page for Kin, a fintech product designed to empower families and loved ones to manage finances, automate payments, and grow wealth together. The site highlights Kin's features, encourages user engagement, and includes a waitlist form to collect early access signups.",
   technologies: ["React", "Tailwind CSS", "JavaScript", "Responsive Design"],
-  github: "https://github.com", // Replace with actual repo if available
-  demo: "https://demo.com",     // Replace with actual live URL
+  github: "https://github.com/Ade1fe/kin", 
+  demo: "https://ki-n.netlify.app",   
   image: "/kin.png",
   type: "Web Application",
   color: "from-purple-500 to-pink-500"
@@ -2756,7 +2747,7 @@ const toolsSkills = [
               transition={{ duration: 0.5 }}
               className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500"
             >
-              {"<Damisi />"}
+              {"<Deife />"}
             </motion.div>
 
             {/* Desktop Navigation */}
