@@ -1340,19 +1340,15 @@ export default function Portfolio() {
 
   // Function to handle CV download
   const handleDownloadCV = () => {
-    // In a real deployment, this would download your actual CV
-    // For now, we'll show an alert explaining this is a preview
-    alert(
-      "CV download will work after deployment. Add your CV file to public/cv/Oluwadamisi_Damilola_CV.pdf when you deploy the site.",
-    )
+ 
 
     // The code below will work after deployment when your CV file exists
-    // const link = document.createElement("a");
-    // link.href = "/cv/Oluwadamisi_Damilola_CV.pdf";
-    // link.download = "Oluwadamisi_Damilola_CV.pdf";
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
+    const link = document.createElement("a");
+    link.href = "/cv/Oluwadamisi_Damilola_CV.pdf";
+    link.download = "Oluwadamisi_Damilola_CV.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   // Handle form input changes
@@ -1406,74 +1402,88 @@ export default function Portfolio() {
     }
   }
 
-  const frontendSkills = [
-    "React.js",
-    "JavaScript",
-    "TypeScript",
-    "HTML5",
-    "CSS3",
-    "Tailwind CSS",
-    "Chakra UI",
-    "Material UI",
-    "Responsive Design",
-  ]
+const frontendSkills = [
+  "React.js",
+  "JavaScript",
+  "TypeScript",
+  "HTML5",
+  "CSS3",
+  "Tailwind CSS",
+  "Chakra UI",
+  "Material UI",
+  "Redux",
+  "React Router",
+  "State Management",
+  "API Integration",
+  "Responsive Web Design",
+  "SEO Best Practices",
+  "Code Review & Collaboration",
+];
 
-  const mobileSkills = [
-    "Flutter",
-    "Dart",
-    "Firebase",
-    "Android Development",
-    "iOS Development",
-    "Cross-platform Development",
-  ]
 
-  const toolsSkills = [
-    "Git",
-    "GitHub",
-    "Visual Studio Code",
-    "Figma",
-    "Firebase Auth",
-    "Firestore",
-    "Node.js",
-    "REST APIs",
-  ]
+const mobileSkills = [
+  "Flutter",
+  "Dart",
+  "Firebase",
+  "Android Development",
+  "iOS Development",
+  "Cross-platform Development",
+  "State Management",
+  "GoRouter",
+  "API Integration",
+  "UI/UX Design",
+  "Responsive Design",
+  // "Version Control (Git)",  
+]
+
+
+const toolsSkills = [
+  "Git & GitHub",
+  "Visual Studio Code",
+  "Figma",
+  "Firebase Auth",
+  "Cloud Firestore",
+  "Node.js",
+  "REST APIs",
+];
 
   const projects = [
-    {
-      title: "React Task Manager",
-      description:
-        "A comprehensive task management SPA built with React, featuring custom hooks, Firebase integration, and optimized performance with 40% reduction in unnecessary re-renders.",
-      technologies: ["React", "Chakra UI", "Firebase", "Custom Hooks"],
-      github: "https://github.com",
-      demo: "https://demo.com",
-      image: "/placeholder.svg?height=200&width=300",
-      type: "Web Application",
-      color: "from-pink-500 to-rose-500",
-    },
-    {
-      title: "Flutter E-Commerce App",
-      description:
-        "Beautiful and responsive e-commerce mobile application with product listings, search filters, shopping cart, and real-time data updates using Firebase.",
-      technologies: ["Flutter", "Dart", "Firebase", "Material Design"],
-      github: "https://github.com",
-      demo: "https://demo.com",
-      image: "/placeholder.svg?height=200&width=300",
-      type: "Mobile Application",
-      color: "from-cyan-500 to-blue-500",
-    },
-    {
-      title: "Personal Portfolio Website",
-      description:
-        "Professional portfolio website showcasing development work with contact form, resume download, and project galleries. Achieving 300+ views per month.",
-      technologies: ["React", "Next.js", "Tailwind CSS", "TypeScript"],
-      github: "https://github.com",
-      demo: "https://demo.com",
-      image: "/placeholder.svg?height=200&width=300",
-      type: "Web Application",
-      color: "from-violet-500 to-purple-500",
-    },
-  ]
+  {
+  title: "Cut2Fit Moda",
+  description:
+    "An elegant e-commerce platform for custom and ready-to-wear fashion pieces. Built with React and Firebase, it features dynamic product listings, role-based dashboards for admins and customers, and seamless cart & checkout functionality. Designed with fashion-forward UI using Chakra UI.",
+  technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
+  github: "https://github.com/Ade1fe?tab=repositories",
+  demo: "https://cut2fit-moda.netlify.app", 
+  image: "/cut2fit.png",
+  type: "Web Application",
+  color: "from-rose-500 to-fuchsia-600",
+},
 
+{
+  title: "Gomine Food",
+  description:
+    "A sleek and intuitive Flutter recipe app powered by the MealDB API. Users can browse, search, and view detailed meal recipes with images and instructions. The app uses Firebase for backend integration and GoRouter for seamless navigation.",
+  technologies: ["Flutter", "Dart", "MealDB API", "Firebase", "GoRouter"],
+  github: "https://github.com/Ade1fe/gomine-food-2.0",
+  demo: "https://drive.google.com/file/d/1G5JwRtUCNM7t87egQcDoGAKM_lwIof3P/view?usp=sharing", 
+  image: "/gominefood.png",
+  type: "Mobile Application",
+  color: "from-green-400 to-emerald-500"
+},
+{
+  title: "Kin – Fintech",
+  description:
+    "A modern and elegant landing page for Kin, a fintech product designed to empower families and loved ones to manage finances, automate payments, and grow wealth together. The site highlights Kin's features, encourages user engagement, and includes a waitlist form to collect early access signups.",
+  technologies: ["React", "Tailwind CSS", "JavaScript", "Responsive Design"],
+  github: "https://github.com/Ade1fe/kin", 
+  demo: "https://ki-n.netlify.app",   
+  image: "/kin.png",
+  type: "Web Application",
+  color: "from-purple-500 to-pink-500"
+}
+  ]
+  
   const experience = [
     {
       title: "Frontend Developer",
@@ -1579,7 +1589,7 @@ export default function Portfolio() {
               transition={{ duration: 0.5 }}
               className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500"
             >
-              {"<Damisi />"}
+              {"<Deife. />"}
             </motion.div>
 
             {/* Desktop Navigation */}
