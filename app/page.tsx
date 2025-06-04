@@ -1483,7 +1483,7 @@ const toolsSkills = [
   color: "from-purple-500 to-pink-500"
 }
   ]
-  
+
   const experience = [
     {
       title: "Frontend Developer",
@@ -1895,7 +1895,7 @@ const toolsSkills = [
               </div>
 
               {/* CV Download in About Section */}
-              <div className="mb-6">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-1  items-start mb-6">
                 <Button
                   onClick={handleDownloadCV}
                   className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white border-0 mr-4"
