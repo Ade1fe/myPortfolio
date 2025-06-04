@@ -5,7 +5,6 @@
 import { Resend } from "resend"
 
 // Use environment variable for security
-// const resend = new Resend(process.env.RESEND_API_KEY || "re_JcwKUHKa_CQGZZJcwcBcwGDnFn1UKjLwo")
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 type ContactFormData = {
