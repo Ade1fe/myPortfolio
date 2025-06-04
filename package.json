@@ -1,5 +1,5 @@
 {
-  "name": "my-v0-project",
+  "name": "my-portfolio-project",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
-    "@netlify/plugin-nextjs": "^5.11.2",
     "@radix-ui/react-accordion": "1.2.2",
     "@radix-ui/react-alert-dialog": "1.1.4",
     "@radix-ui/react-aspect-ratio": "1.1.1",
@@ -42,21 +41,21 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
-    "date-fns": "4.1.0",
+    "date-fns": "2.28.0",
     "embla-carousel-react": "8.5.1",
-    "framer-motion": "^12.15.0",
     "input-otp": "1.4.1",
+    "framer-motion": "^10.16.4",
+    "resend": "^3.2.0",
+    "nodemailer": "^6.9.9",
     "lucide-react": "^0.454.0",
     "next": "15.2.4",
     "next-themes": "^0.4.4",
-    "nodemailer": "^7.0.3",
-    "react": "^19",
+    "react": "^18.2.0",
     "react-day-picker": "8.10.1",
-    "react-dom": "^19",
+    "react-dom": "^18.2.0",
     "react-hook-form": "^7.54.1",
     "react-resizable-panels": "^2.1.7",
     "recharts": "2.15.0",
-    "resend": "^4.5.1",
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
@@ -64,11 +63,15 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@types/node": "^22",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "@types/nodemailer": "^6.4.14",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4",
     "postcss": "^8",
-    "tailwindcss": "^3.4.17",
+    "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }
 }

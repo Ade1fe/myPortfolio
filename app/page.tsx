@@ -1711,7 +1711,7 @@
 //               </motion.a>
 //               <motion.a
 //                 whileHover={{ scale: 1.2 }}
-//                 href="https://linkedin.com"
+//                 href="https://www.linkedin.com/in/oluwadamilola-oluwadamisi-699325235/"
 //                 className="text-slate-400 hover:text-purple-500 transition-colors"
 //               >
 //                 <Linkedin size={24} />
@@ -2287,7 +2287,7 @@
 //                     asChild
 //                     className="bg-slate-800/50 border-cyan-500/50 text-cyan-500 hover:bg-cyan-500/10"
 //                   >
-//                     <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+//                     <a href="https://www.linkedin.com/in/oluwadamilola-oluwadamisi-699325235/" target="_blank" rel="noopener noreferrer">
 //                       <Linkedin className="mr-2" size={16} />
 //                       LinkedIn
 //                     </a>
@@ -2947,22 +2947,22 @@ const toolsSkills = [
               className="flex justify-center space-x-6"
             >
               <motion.a
-                whileHover={{ scale: 1.2 }}
-                href="https://github.com"
+                whileHover={{ scale: 1.2 }} rel="noopener noreferrer"
+                href="https://github.com/Ade1fe" target="_blank"
                 className="text-slate-400 hover:text-pink-500 transition-colors"
               >
                 <Github size={24} />
               </motion.a>
               <motion.a
                 whileHover={{ scale: 1.2 }}
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/oluwadamilola-oluwadamisi-699325235/" target="_blank" rel="noopener noreferrer"
                 className="text-slate-400 hover:text-purple-500 transition-colors"
               >
                 <Linkedin size={24} />
               </motion.a>
               <motion.a
                 whileHover={{ scale: 1.2 }}
-                href="mailto:addypearl09@gmail.com"
+                href="mailto:addypearl09@gmail.com" 
                 className="text-slate-400 hover:text-cyan-500 transition-colors"
               >
                 <Mail size={24} />
@@ -3519,7 +3519,7 @@ const toolsSkills = [
                     asChild
                     className="bg-slate-800/50 border-pink-500/50 text-pink-500 hover:bg-pink-500/10"
                   >
-                    <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+                    <a href="https://github.com/Ade1fe" target="_blank" rel="noopener noreferrer">
                       <Github className="mr-2" size={16} />
                       GitHub
                     </a>
@@ -3532,7 +3532,7 @@ const toolsSkills = [
                     asChild
                     className="bg-slate-800/50 border-cyan-500/50 text-cyan-500 hover:bg-cyan-500/10"
                   >
-                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.linkedin.com/in/oluwadamilola-oluwadamisi-699325235/" target="_blank" rel="noopener noreferrer">
                       <Linkedin className="mr-2" size={16} />
                       LinkedIn
                     </a>
