@@ -32,6 +32,8 @@ import {
   AlertCircle,
 } from "lucide-react"
 import { sendContactEmail } from "./action"
+import { useKeenSlider } from "keen-slider/react";
+import "keen-slider/keen-slider.min.css";
 
 export default function Portfolio() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -199,6 +201,33 @@ const toolsSkills = [
   "REST APIs",
 ];
 
+// ProjectsSection
+const [sliderRef] = useKeenSlider({
+  loop: false,
+  mode: "free-snap",
+  slides: {
+    perView: 1.1,
+    spacing: 0,
+  },
+  breakpoints: {
+     "(min-width: 498px)": {
+      slides: { perView: 1.50, spacing: 4 },
+    },
+    "(min-width: 768px)": {
+      slides: { perView: 2.2, spacing: 14 },
+    },
+     "(min-width: 868px)": {
+      slides: { perView: 2.30, spacing: 14 },
+    },
+    "(min-width: 1024px)": {
+      slides: { perView: 2.50, spacing: 2 },
+    },
+  },
+});
+
+
+  
+
   const projects = [
   {
   title: "Cut2Fit Moda",
@@ -221,7 +250,7 @@ const toolsSkills = [
   demo: "https://drive.google.com/file/d/1G5JwRtUCNM7t87egQcDoGAKM_lwIof3P/view?usp=sharing", 
   image: "/gominefood.png",
   type: "Mobile Application",
-  color: "from-green-400 to-emerald-500"
+  color: "from-blue-400 to-emerald-500"
 },
 {
   title: "Kin – Fintech",
@@ -232,8 +261,20 @@ const toolsSkills = [
   demo: "https://ki-n.netlify.app",   
   image: "/kin.png",
   type: "Web Application",
-  color: "from-purple-500 to-pink-500"
+  color: "from-yellow-500 to-purple-500"
+},
+{
+  title: "Momentum",
+  description:
+    "Momentum is a modern and intuitive Flutter task manager app built to boost productivity. It allows users to create, categorize, and manage daily tasks with features like deadlines, reminders, and progress tracking. The app uses Firebase for backend services like authentication and real-time data syncing, while Provider handles efficient state management.",
+  technologies: ["Flutter", "Dart", "Firebase", "Provider"],
+  github: "https://github.com/Ade1fe/event_flow",
+  demo: "https://drive.google.com/file/d/1r7wMqivM54BqzuQV50bbvhyT8Hc0axNr/view?usp=sharing", 
+  image: "/momentum.png",
+  type: "Mobile Application",
+  color: "from-green-400 to-orange-500"
 }
+
   ]
 
   const experience = [
@@ -837,7 +878,7 @@ const toolsSkills = [
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-800/50">
+      {/* <section id="projects" className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-800/50">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -913,7 +954,93 @@ const toolsSkills = [
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
+
+
+      <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+  <div className="max-w-7xl mx-auto">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="text-center mb-12"
+    >
+      <h2 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
+        Featured Projects
+      </h2>
+      <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 mx-auto rounded-full"></div>
+    </motion.div>
+
+    <div ref={sliderRef} className="keen-slider -mx-4 px-1 sm:px-2 lg:px-4">
+      {projects.map((project, index) => (
+        <motion.div
+          key={index}
+          className="keen-slider__slide px-4 md:px-5 lg:px-6"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: index * 0.1 }}
+        >
+          <Card className="bg-slate-800/70 border border-slate-700  overflow-hidden h-full shadow-lg hover:shadow-cyan-700/20 transition-shadow duration-300">
+            <div className={`h-1.5 bg-gradient-to-r ${project.color}`}></div>
+            <div className="aspect-video bg-slate-700 relative overflow-hidden group">
+              <img
+                src={project.image || "/placeholder.svg"}
+                alt={project.title}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" asChild className="bg-slate-800/80 text-white border-0">
+                    <a href={project.github} target="_blank" rel="noopener noreferrer">
+                      <Github className="mr-1" size={16} />
+                      Code
+                    </a>
+                  </Button>
+                  <Button size="sm" asChild className={`bg-gradient-to-r ${project.color} border-0`}>
+                    <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="mr-1" size={16} />
+                      Demo
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <CardHeader className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <CardTitle className="text-white text-sm  md:text-md lg:text-lg">{project.title}</CardTitle>
+                <Badge
+                  variant="outline"
+                  className={`text-xs bg-gradient-to-r ${project.color} text-white border-0`}
+                >
+                  {project.type}
+                </Badge>
+              </div>
+              <CardDescription className="text-slate-300 text-sm">
+                {project.description}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+              <div className="flex flex-wrap gap-2">
+                {project.technologies.map((tech) => (
+                  <Badge
+                    key={tech}
+                    variant="outline"
+                    className="bg-slate-700/50 text-slate-200 border-slate-600 text-xs"
+                  >
+                    {tech}
+                  </Badge>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+</section>
+
 
       {/* Experience Section */}
       <section id="experience" className="py-16 px-4 sm:px-6 lg:px-8">
