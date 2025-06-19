@@ -2,7 +2,7 @@
 
 A beautiful, modern, and responsive portfolio website built with Next.js, TypeScript, and Framer Motion. This portfolio showcases my skills as a Frontend & Mobile App Developer specializing in React.js and Flutter.
 
-![Portfolio Preview](https://via.placeholder.com/800x400/1e293b/ffffff?text=Portfolio+Preview)
+![Portfolio Preview](https://deife.netlify.app/)
 
 ## ✨ Features
 
@@ -56,25 +56,6 @@ Make sure you have the following installed:
 
 4. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000) to see the portfolio.
-
-## 📁 Project Structure
-
-\`\`\`
-portfolio/
-├── app/
-│   ├── globals.css          # Global styles
-│   ├── layout.tsx           # Root layout component
-│   └── page.tsx             # Main portfolio page
-├── components/
-│   └── ui/                  # shadcn/ui components
-├── public/
-│   └── placeholder.svg      # Placeholder images
-├── tailwind.config.ts       # Tailwind configuration
-├── package.json             # Dependencies and scripts
-└── README.md               # Project documentation
-\`\`\`
-
-## 🎨 Customization
 
 ### Personal Information
 
