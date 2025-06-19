@@ -125,15 +125,7 @@ export default function Portfolio() {
       const result = await sendContactEmail(formData)
 
       if (result.success) {
-        // Check if it's a fallback to mailto
-        if (result.fallback && result.mailtoData) {
-          // Create mailto link and open it
-          const subject = encodeURIComponent(result.mailtoData.subject)
-          const body = encodeURIComponent(result.mailtoData.body)
-          const mailtoLink = `mailto:${result.mailtoData.to}?subject=${subject}&body=${body}`
-          window.location.href = mailtoLink
-        }
-
+    
         setSubmitStatus({
           type: "success",
           message: result.message,
@@ -202,30 +194,82 @@ const toolsSkills = [
 ];
 
 // ProjectsSection
-const [sliderRef] = useKeenSlider({
-  loop: false,
-  mode: "free-snap",
-  slides: {
-    perView: 1.1,
-    spacing: 0,
-  },
-  breakpoints: {
-     "(min-width: 498px)": {
-      slides: { perView: 1.50, spacing: 4 },
-    },
-    "(min-width: 768px)": {
-      slides: { perView: 2.2, spacing: 14 },
-    },
-     "(min-width: 868px)": {
-      slides: { perView: 2.30, spacing: 14 },
-    },
-    "(min-width: 1024px)": {
-      slides: { perView: 2.50, spacing: 2 },
-    },
-  },
-});
+// const [sliderRef] = useKeenSlider({
+//   loop: false,
+//   mode: "free-snap",
+//   slides: {
+//     perView: 1.1,
+//     spacing: 0,
+//   },
+//   breakpoints: {
+//      "(min-width: 498px)": {
+//       slides: { perView: 1.50, spacing: 4 },
+//     },
+//     "(min-width: 768px)": {
+//       slides: { perView: 2.2, spacing: 14 },
+//     },
+//      "(min-width: 868px)": {
+//       slides: { perView: 2.30, spacing: 14 },
+//     },
+//     "(min-width: 1024px)": {
+//       slides: { perView: 2.50, spacing: 2 },
+//     },
+//   },
+// });
 
 
+const [currentSlide, setCurrentSlide] = useState(0)
+const paginationRef = useRef<HTMLDivElement>(null)
+
+const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>(
+  {
+    loop: false,
+    mode: "free-snap",
+    slides: {
+      perView: 1.1,
+      spacing: 0,
+    },
+    breakpoints: {
+      "(min-width: 498px)": {
+        slides: { perView: 1.5, spacing: 4 },
+      },
+      "(min-width: 768px)": {
+        slides: { perView: 2.2, spacing: 14 },
+      },
+      "(min-width: 868px)": {
+        slides: { perView: 2.3, spacing: 14 },
+      },
+      "(min-width: 1024px)": {
+        slides: { perView: 2.5, spacing: 2 },
+      },
+    },
+    slideChanged(slider) {
+      setCurrentSlide(slider.track.details.rel)
+    },
+  },
+  [PaginationPlugin(paginationRef)]
+)
+
+
+
+function PaginationPlugin(paginationRef: React.RefObject<HTMLDivElement>) {
+  return (slider: any) => {
+    const update = () => {
+      const children = paginationRef.current?.children
+      if (children) {
+        Array.from(children).forEach((dot, index) => {
+          if (dot instanceof HTMLElement) {
+            dot.classList.toggle("bg-cyan-500", index === slider.track.details.rel)
+            dot.classList.toggle("bg-slate-600", index !== slider.track.details.rel)
+          }
+        })
+      }
+    }
+
+    slider.on("created", () => update())
+    slider.on("slideChanged", () => update())
+  }
+}
   
 
   const projects = [
@@ -1039,6 +1083,19 @@ const [sliderRef] = useKeenSlider({
       ))}
     </div>
   </div>
+
+  <div className="flex justify-center mt-6" ref={paginationRef}>
+  {projects.map((_, idx) => (
+    <button
+      key={idx}
+      onClick={() => instanceRef.current?.moveToIdx(idx)}
+     className={`w-3 h-3 mx-1 rounded-full transition-all duration-300 ${
+    currentSlide === idx ? "bg-cyan-500 scale-110" : "bg-slate-600"
+  }`}
+    />
+  ))}
+</div>
+
 </section>
 
 
