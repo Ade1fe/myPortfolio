@@ -273,6 +273,69 @@ function PaginationPlugin(paginationRef: React.RefObject<HTMLDivElement>) {
   
 
   const projects = [
+{
+  title: "Jma Couture",
+  description:
+    "A modern fashion e-commerce web application designed to showcase collections, manage product listings, and deliver a smooth shopping experience. The platform features a clean, responsive user interface, seamless navigation, and real-time data handling to support product updates and customer engagement.",
+  technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
+  github: "https://github.com/Ade1fe?tab=repositories",
+  demo: "https://jma-rich.vercel.app",
+  image: "/jma.png",
+  type: "Web Application",
+  color: "from-rose-500 to-fuchsia-600",
+},
+{
+  title: "FinoSell Approvals",
+  description:
+    "A production-ready mobile finance and approval management application published on the Google Play Store. The app enables users to send and receive money, approve or reject requests, monitor financial activities, and download transaction receipts. It features secure authentication, real-time updates, and a streamlined user experience for managing business approvals and finances on the go.",
+  technologies: ["Flutter", "Dart", "Firebase", "REST APIs"],
+  github: "https://github.com/Ade1fe?tab=repositories",
+  // demo: "https://finosell.com/",
+  image: "/approvals.png",
+  type: "Mobile Application",
+  color: "from-rose-500 to-fuchsia-600",
+}
+
+
+,{
+  title: "FinoSell Dashboard",
+  description:
+    "A scalable business management dashboard built for company executives to manage teams, approval workflows, and operational activities. The application supports role-based access control, dynamic dashboards, and secure authentication. Deployed on Render to ensure reliable hosting, environment management, and production readiness.",
+  technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
+  github: "https://github.com/Ade1fe?tab=repositories",
+  demo: "https://dashboard.finosell.com/",
+  image: "/finosell.png",
+  type: "Web Application",
+  color: "from-rose-500 to-fuchsia-600",
+}
+,{
+  title: "MediSwift App",
+  description:
+    "A Flutter-based healthcare logistics mobile application designed for riders to deliver hospital and medical equipment efficiently. The app enables task assignment, delivery tracking, real-time status updates, and reliable communication to support time-sensitive medical deliveries with a smooth and optimized user experience.",
+  technologies: ["Flutter", "Dart", "Firebase", "REST APIs"],
+  github: "https://github.com/Ade1fe?tab=repositories",
+  // demo: "https://finosell.com/",
+  image: "/mediswift.png",
+  type: "Mobile Application",
+  color: "from-rose-500 to-fuchsia-600",
+}
+
+
+
+,{
+  title: "Smart Learning Academy",
+  description:
+    "An education-focused web platform designed to connect tutors with students while enabling parents to monitor academic progress. The application provides tools for class management, session tracking, and performance reporting. Deployed on Render to support scalability, secure deployments, and continuous delivery.",
+  technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
+  github: "https://github.com/Ade1fe?tab=repositories",
+  demo: "https://finosell.com/",
+  image: "/school.png",
+  type: "Web Application",
+  color: "from-rose-500 to-fuchsia-600",
+}
+
+,
+
   {
   title: "Cut2Fit Moda",
   description:
@@ -284,6 +347,7 @@ function PaginationPlugin(paginationRef: React.RefObject<HTMLDivElement>) {
   type: "Web Application",
   color: "from-rose-500 to-fuchsia-600",
 },
+
 
 {
   title: "Gomine Food",
