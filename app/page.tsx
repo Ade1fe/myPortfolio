@@ -1333,7 +1333,7 @@ function PaginationPlugin(paginationRef: React.RefObject<HTMLDivElement>) {
                   <div className="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center mr-4">
                     <Mail className="text-pink-500" size={20} />
                   </div>
-                  <span className="text-slate-300">addypearl09@gmail.com</span>
+                  <span className="text-slate-300">damilolaoluwadamisi@gmail.com</span>
                 </motion.div>
                 <motion.div whileHover={{ x: 5 }} className="flex items-center">
                   <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mr-4">
@@ -1470,7 +1470,7 @@ function PaginationPlugin(paginationRef: React.RefObject<HTMLDivElement>) {
                   </form>
 
                   <div className="mt-4 text-xs text-slate-400 text-center">
-                    Your message will be sent directly to addypearl09@gmail.com
+                    Your message will be sent directly to damilolaoluwadamisi@gmail.com
                   </div>
                 </CardContent>
               </Card>
