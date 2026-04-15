@@ -1,57 +1,57 @@
-
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Cormorant_Garamond, Manrope } from "next/font/google"
+
 import "./globals.css"
 
-const inter = Inter({
+const manrope = Manrope({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  variable: "--font-sans",
+})
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["500", "600", "700"],
 })
 
 export const metadata: Metadata = {
-  title: "Deife Damisi Damilola | Frontend & Mobile Developer Portfolio",
+  metadataBase: new URL("https://deife.netlify.app"),
+  title: "Damisi Damilola | React and Flutter Developer",
   description:
-    "Portfolio of Oluwadamisi Damilola, Frontend & Mobile App Developer specializing in React.js and Flutter development in Lagos, Nigeria.",
+    "Portfolio of Oluwadamisi Damilola, a frontend and mobile app developer building responsive React interfaces and polished Flutter products from Lagos, Nigeria.",
   keywords: [
-    "Frontend Developer in Lagos",
-    "React Developer Portfolio",
-    "Flutter Developer Nigeria",
-    "Mobile App Developer",
-    "JavaScript Developer",
-    "React.js Portfolio",
-    "Flutter Projects",
-    "Oluwadamisi Damilola Developer",
+    "Damisi Damilola portfolio",
+    "React developer portfolio",
+    "Flutter developer Nigeria",
+    "Frontend developer Lagos",
+    "Mobile app developer portfolio",
   ],
   authors: [{ name: "Oluwadamisi Damilola" }],
   creator: "Oluwadamisi Damilola",
   openGraph: {
-    title: "Deife Damisi Damilola | Frontend & Mobile Developer",
-    description: "Creative Frontend & Mobile App Developer specializing in React.js and Flutter.",
-    url: "https://deife.netlify.app",
-    siteName: "Deife Damisi Portfolio",
+    title: "Damisi Damilola | React and Flutter Developer",
+    description: "Frontend and mobile product work focused on responsive systems, clean UX, and polished implementation.",
+    url: "/",
+    siteName: "Damisi Damilola Portfolio",
     type: "website",
     images: [
       {
-        url: "https://deife.netlify.app/og-image.png",
+        url: "/aboutme.jpg",
         width: 1200,
-        height: 630,
-        alt: "Deife Damisi Portfolio Preview",
+        height: 1200,
+        alt: "Oluwadamisi Damilola portrait",
       },
     ],
-    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Damisi Damilola | Frontend & Mobile Developer",
-    description: "Creative Frontend & Mobile App Developer specializing in React.js and Flutter.",
-    images: ["https://deife.netlify.app/og-image.png"],
+    title: "Damisi Damilola | React and Flutter Developer",
+    description: "Frontend and mobile product work focused on responsive systems, clean UX, and polished implementation.",
+    images: ["/aboutme.jpg"],
   },
   robots: {
     index: true,
     follow: true,
-  },
-  icons: {
-    icon: "/favicon.ico",
   },
 }
 
@@ -62,7 +62,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning className={inter.className}>
+      <body suppressHydrationWarning className={`${manrope.variable} ${cormorant.variable} antialiased`}>
         {children}
       </body>
     </html>

@@ -1,122 +1,6 @@
-
-
-// "use server"
-
-// import { Resend } from "resend"
-
-// // Use environment variable for security
-// const resend = new Resend(process.env.RESEND_API_KEY || "re_JcwKUHKa_CQGZZJcwcBcwGDnFn1UKjLwo")
-// // const resend = new Resend(process.env.RESEND_API_KEY)
-
-// type ContactFormData = {
-//   name: string
-//   email: string
-//   message: string
-// }
-
-// export async function sendContactEmail(data: ContactFormData) {
-//   try {
-//     // Validate the data first
-//     if (!data.name || !data.email || !data.message) {
-//       return {
-//         success: false,
-//         message: "Please fill in all required fields.",
-//       }
-//     }
-
-//     console.log("🔄 Attempting to send email with Resend...")
-
-//     const { data: emailData, error } = await resend.emails.send({
-//       from: "Portfolio <onboarding@resend.dev>", 
-//       to: ["addypearl09@gmail.com"],
-//       subject: `Portfolio Contact from ${data.name}`,
-//     reply_to: data.email,
-
-//       html: `
-//         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-//           <div style="background: linear-gradient(135deg, #ec4899, #8b5cf6, #06b6d4); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-//             <h1 style="color: white; margin: 0; text-align: center;">New Portfolio Contact</h1>
-//           </div>
-          
-//           <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; border-left: 4px solid #ec4899;">
-//             <h2 style="color: #1e293b; margin-top: 0;">Contact Details</h2>
-//             <p style="margin: 10px 0;"><strong style="color: #ec4899;">Name:</strong> ${data.name}</p>
-//             <p style="margin: 10px 0;"><strong style="color: #8b5cf6;">Email:</strong> ${data.email}</p>
-//           </div>
-          
-//           <div style="margin: 20px 0;">
-//             <h3 style="color: #1e293b; border-bottom: 2px solid #06b6d4; padding-bottom: 10px;">Message</h3>
-//             <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; border-left: 4px solid #06b6d4; white-space: pre-wrap; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6;">
-// ${data.message}
-//             </div>
-//           </div>
-          
-//           <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
-          
-//           <div style="text-align: center; color: #64748b; font-size: 12px;">
-//             <p>This message was sent from your portfolio contact form.</p>
-//             <p>Reply directly to this email to respond to ${data.name}</p>
-//           </div>
-//         </div>
-//       `,
-//       text: `
-// New Portfolio Contact
-
-// Name: ${data.name}
-// Email: ${data.email}
-
-// Message:
-// ${data.message}
-
-// ---
-// This message was sent from your portfolio contact form.
-// Reply directly to this email to respond to ${data.name}.
-//       `,
-//     })
-
-//     if (error) {
-//       console.error("❌ Resend error:", error)
-
-//       // If Resend fails, fall back to mailto
-//       console.log("🔄 Falling back to mailto method...")
-//       return {
-//         success: true,
-//         message: "Message received! Opening your email client to send the message.",
-//         fallback: true,
-//         mailtoData: {
-//           to: "addypearl09@gmail.com",
-//           subject: `Portfolio Contact from ${data.name}`,
-//           body: `Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`,
-//         },
-//       }
-//     }
-
-//     console.log("✅ Email sent successfully via Resend:", emailData)
-//     return {
-//       success: true,
-//       message: "Thank you! Your message has been sent successfully. I'll get back to you soon! ",
-//     }
-//   } catch (error) {
-//     console.error("❌ Error sending email:", error)
-
-//     // Fallback to mailto if Resend completely fails
-//     return {
-//       success: true,
-//       message: "Opening your email client to send the message.",
-//       fallback: true,
-//       mailtoData: {
-//         to: "addypearl09@gmail.com",
-//         subject: `Portfolio Contact from ${data.name}`,
-//         body: `Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`,
-//       },
-//     }
-//   }
-// }
 "use server"
 
 import { Resend } from "resend"
-
-const resend = new Resend(process.env.RESEND_API_KEY || "re_JcwKUHKa_CQGZZJcwcBcwGDnFn1UKjLwo")
 
 type ContactFormData = {
   name: string
@@ -124,84 +8,123 @@ type ContactFormData = {
   message: string
 }
 
+type MailtoData = {
+  to: string
+  subject: string
+  body: string
+}
+
+const CONTACT_EMAIL = "addypearl09@gmail.com"
+const FALLBACK_FROM_EMAIL = "Portfolio <onboarding@resend.dev>"
+
+function sanitizeText(value: string) {
+  return value.trim().replace(/\r\n/g, "\n")
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+}
+
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+function buildMailtoData(data: ContactFormData): MailtoData {
+  return {
+    to: CONTACT_EMAIL,
+    subject: `Portfolio inquiry from ${data.name}`,
+    body: `Name: ${data.name}\nEmail: ${data.email}\n\nProject details:\n${data.message}`,
+  }
+}
+
 export async function sendContactEmail(data: ContactFormData) {
-  try {
-    if (!data.name || !data.email || !data.message) {
-      return {
-        success: false,
-        message: "Please fill in all required fields.",
-      }
+  const payload = {
+    name: sanitizeText(data.name),
+    email: sanitizeText(data.email),
+    message: sanitizeText(data.message),
+  }
+
+  if (!payload.name || !payload.email || !payload.message) {
+    return {
+      success: false,
+      message: "Please fill in your name, email, and project details.",
     }
+  }
 
-    console.log("🔄 Attempting to send email with Resend...")
+  if (!isValidEmail(payload.email)) {
+    return {
+      success: false,
+      message: "Please enter a valid email address.",
+    }
+  }
 
-    const { data: emailData, error } = await resend.emails.send({
-      from: "Portfolio <onboarding@resend.dev>",
-      to: ["addypearl09@gmail.com"],
-      subject: `Portfolio Contact from ${data.name}`,
-      reply_to: data.email, // ✅ Correct key
+  const mailtoData = buildMailtoData(payload)
+  const resendApiKey = process.env.RESEND_API_KEY
 
+  if (!resendApiKey) {
+    return {
+      success: true,
+      fallback: true,
+      mailtoData,
+      message: "Direct email is not configured yet. Your email app will open instead.",
+    }
+  }
+
+  try {
+    const resend = new Resend(resendApiKey)
+    const { error } = await resend.emails.send({
+      from: process.env.PORTFOLIO_FROM_EMAIL || FALLBACK_FROM_EMAIL,
+      to: [CONTACT_EMAIL],
+      subject: `Portfolio inquiry from ${payload.name}`,
+      reply_to: payload.email,
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <div style="background: linear-gradient(135deg, #ec4899, #8b5cf6, #06b6d4); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-            <h1 style="color: white; margin: 0; text-align: center;">New Portfolio Contact</h1>
+        <div style="font-family: Arial, sans-serif; max-width: 680px; margin: 0 auto; padding: 24px; color: #1c1917;">
+          <div style="padding: 24px; border-radius: 18px; background: linear-gradient(135deg, #c6633f, #295f86); color: #fafaf9;">
+            <p style="margin: 0 0 8px; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;">New portfolio inquiry</p>
+            <h1 style="margin: 0; font-size: 28px;">${escapeHtml(payload.name)}</h1>
           </div>
 
-          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; border-left: 4px solid #ec4899;">
-            <h2 style="color: #1e293b; margin-top: 0;">Contact Details</h2>
-            <p><strong style="color: #ec4899;">Name:</strong> ${data.name}</p>
-            <p><strong style="color: #8b5cf6;">Email:</strong> ${data.email}</p>
+          <div style="margin-top: 20px; padding: 24px; border-radius: 18px; background: #f6efe6; border: 1px solid #e7dccf;">
+            <p style="margin: 0 0 10px;"><strong>Email:</strong> ${escapeHtml(payload.email)}</p>
+            <p style="margin: 0; white-space: pre-wrap; line-height: 1.7;">${escapeHtml(payload.message)}</p>
           </div>
 
-          <div style="margin: 20px 0;">
-            <h3 style="color: #1e293b; border-bottom: 2px solid #06b6d4; padding-bottom: 10px;">Message</h3>
-            <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; border-left: 4px solid #06b6d4; white-space: pre-wrap;">
-${data.message}
-            </div>
-          </div>
-
-          <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
-
-          <div style="text-align: center; color: #64748b; font-size: 12px;">
-            <p>This message was sent from your portfolio contact form.</p>
-            <p>Reply directly to this email to respond to ${data.name}.</p>
-          </div>
+          <p style="margin-top: 18px; color: #57534e; font-size: 13px;">
+            Reply directly to this email to continue the conversation with ${escapeHtml(payload.name)}.
+          </p>
         </div>
       `,
-
-      text: `
-New Portfolio Contact
-
-Name: ${data.name}
-Email: ${data.email}
-
-Message:
-${data.message}
-
----
-This message was sent from your portfolio contact form.
-Reply directly to this email to respond to ${data.name}.
-      `,
+      text: `New portfolio inquiry\n\nName: ${payload.name}\nEmail: ${payload.email}\n\nProject details:\n${payload.message}`,
     })
 
     if (error) {
-      console.error("❌ Resend error:", error)
+      console.error("Resend error", error)
+
       return {
-        success: false,
-        message: "Something went wrong while sending the message. Please try again later.",
+        success: true,
+        fallback: true,
+        mailtoData,
+        message: "I could not send this directly, so your email app will open instead.",
       }
     }
 
-    console.log("✅ Email sent successfully via Resend:", emailData)
     return {
       success: true,
-      message: "Thank you! Your message has been sent successfully. I'll get back to you soon!",
+      message: "Thanks. Your message has been sent successfully.",
     }
   } catch (error) {
-    console.error("❌ Unexpected error:", error)
+    console.error("Unexpected email error", error)
+
     return {
-      success: false,
-      message: "An unexpected error occurred. Please try again later.",
+      success: true,
+      fallback: true,
+      mailtoData,
+      message: "I could not send this directly, so your email app will open instead.",
     }
   }
 }

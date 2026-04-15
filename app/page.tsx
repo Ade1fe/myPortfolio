@@ -1,145 +1,703 @@
-
 "use client"
 
 import type React from "react"
 
-import { useState, useEffect, useRef } from "react"
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
+import Image from "next/image"
+import { motion, useReducedMotion } from "framer-motion"
 import {
+  AlertCircle,
+  ArrowRight,
+  Award,
+  Briefcase,
+  Calendar,
+  CheckCircle,
+  ChevronDown,
+  Code,
+  Download,
+  ExternalLink,
+  FileText,
   Github,
   Linkedin,
   Mail,
-  ExternalLink,
-  Download,
-  Code,
-  Briefcase,
   MapPin,
-  Calendar,
-  ChevronDown,
   Menu,
-  X,
-  Smartphone,
   Monitor,
-  Award,
-  Star,
-  FileText,
   Send,
-  CheckCircle,
-  AlertCircle,
+  Smartphone,
+  Sparkles,
 } from "lucide-react"
+import { useEffect, useState } from "react"
+
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Textarea } from "@/components/ui/textarea"
+
 import { sendContactEmail } from "./action"
-import { useKeenSlider } from "keen-slider/react";
-import "keen-slider/keen-slider.min.css";
+
+type SectionId = "home" | "about" | "capabilities" | "work" | "experience" | "contact"
+
+type ContactFormState = {
+  name: string
+  email: string
+  message: string
+}
+
+type SubmitState = {
+  type: "success" | "error" | ""
+  message: string
+}
+
+type Project = {
+  title: string
+  type: string
+  summary: string
+  focus: string
+  technologies: string[]
+  image: string
+  github: string
+  demo?: string
+  demoLabel?: string
+  accent: string
+  gradient: string
+}
+
+const navigation: Array<{ id: SectionId; label: string }> = [
+  { id: "home", label: "Home" },
+  { id: "about", label: "About" },
+  { id: "capabilities", label: "Capabilities" },
+  { id: "work", label: "Work" },
+  { id: "experience", label: "Journey" },
+  { id: "contact", label: "Contact" },
+]
+
+const projects: Project[] = [
+  {
+    title: "Jma Couture",
+    type: "Fashion Commerce",
+    summary:
+      "A polished fashion storefront built to showcase collections, manage inventory updates, and keep shopping interactions simple across screen sizes.",
+    focus: "React storefront, Firebase-backed product data, and a cleaner purchase flow.",
+    technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
+    image: "/jma.png",
+    github: "https://github.com/Ade1fe?tab=repositories",
+    demo: "https://jma-rich.vercel.app",
+    demoLabel: "Visit site",
+    accent: "#c6633f",
+    gradient: "linear-gradient(135deg, rgba(198, 99, 63, 0.18), rgba(255, 255, 255, 0.8))",
+  },
+  {
+    title: "FinoSell Approvals",
+    type: "Mobile Finance",
+    summary:
+      "A finance and approvals app for sending funds, reviewing requests, and downloading receipts without overwhelming the user with operational detail.",
+    focus: "Flutter mobile flows for approvals, money movement, and activity visibility.",
+    technologies: ["Flutter", "Dart", "Firebase", "REST APIs"],
+    image: "/approvals.png",
+    github: "https://github.com/Ade1fe?tab=repositories",
+    accent: "#295f86",
+    gradient: "linear-gradient(135deg, rgba(41, 95, 134, 0.18), rgba(255, 255, 255, 0.8))",
+  },
+  {
+    title: "FinoSell Dashboard",
+    type: "Operations Dashboard",
+    summary:
+      "A web dashboard for executives to manage teams, workflows, and role-based approvals with a structure that supports ongoing product growth.",
+    focus: "Admin UX, scalable layout patterns, and access-controlled business tooling.",
+    technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
+    image: "/finosell.png",
+    github: "https://github.com/Ade1fe?tab=repositories",
+    accent: "#8a5836",
+    gradient: "linear-gradient(135deg, rgba(138, 88, 54, 0.16), rgba(255, 255, 255, 0.82))",
+  },
+  {
+    title: "MediSwift App",
+    type: "Healthcare Logistics",
+    summary:
+      "A rider-focused mobile workflow for delivering medical supplies with real-time status updates, task handling, and dependable handoff communication.",
+    focus: "Flutter delivery UX tuned for urgency, status clarity, and day-to-day reliability.",
+    technologies: ["Flutter", "Dart", "Firebase", "REST APIs"],
+    image: "/mediswift.png",
+    github: "https://github.com/Ade1fe?tab=repositories",
+    accent: "#4d7c6e",
+    gradient: "linear-gradient(135deg, rgba(77, 124, 110, 0.18), rgba(255, 255, 255, 0.8))",
+  },
+  {
+    title: "Smart Learning Academy",
+    type: "Education Platform",
+    summary:
+      "An education platform connecting tutors, students, and parents with tools for classes, reporting, and academic progress tracking.",
+    focus: "Responsive learning workflows with role-aware views and Firebase services.",
+    technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
+    image: "/school.png",
+    github: "https://github.com/Ade1fe?tab=repositories",
+    accent: "#7a6a2f",
+    gradient: "linear-gradient(135deg, rgba(122, 106, 47, 0.16), rgba(255, 255, 255, 0.82))",
+  },
+  {
+    title: "Cut2Fit Moda",
+    type: "E-commerce Build",
+    summary:
+      "An e-commerce experience for custom and ready-to-wear fashion products with dynamic inventory views and customer-friendly navigation.",
+    focus: "React commerce UI with dashboards, cart flow, and polished product discovery.",
+    technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
+    image: "/cut2fit.png",
+    github: "https://github.com/Ade1fe?tab=repositories",
+    demo: "https://cut2fit-moda.netlify.app",
+    demoLabel: "View live",
+    accent: "#b1545f",
+    gradient: "linear-gradient(135deg, rgba(177, 84, 95, 0.18), rgba(255, 255, 255, 0.8))",
+  },
+  {
+    title: "Gomine Food",
+    type: "Recipe App",
+    summary:
+      "A mobile recipe product using external API data, Firebase services, and clean content browsing to keep discovery fast and intuitive.",
+    focus: "Search, browse, and detail flows backed by MealDB API integration.",
+    technologies: ["Flutter", "Dart", "MealDB API", "Firebase", "GoRouter"],
+    image: "/gominefood.png",
+    github: "https://github.com/Ade1fe/gomine-food-2.0",
+    demo: "https://drive.google.com/file/d/1G5JwRtUCNM7t87egQcDoGAKM_lwIof3P/view?usp=sharing",
+    demoLabel: "Watch demo",
+    accent: "#d38a33",
+    gradient: "linear-gradient(135deg, rgba(211, 138, 51, 0.18), rgba(255, 255, 255, 0.78))",
+  },
+  {
+    title: "Kin",
+    type: "Fintech Landing Page",
+    summary:
+      "A conversion-focused landing page for a fintech concept, designed to communicate product value quickly and capture waitlist interest.",
+    focus: "Tailwind landing page system with product messaging and waitlist conversion.",
+    technologies: ["React", "Tailwind CSS", "JavaScript", "Responsive Design"],
+    image: "/kin.png",
+    github: "https://github.com/Ade1fe/kin",
+    demo: "https://ki-n.netlify.app",
+    demoLabel: "Open site",
+    accent: "#6d5ca9",
+    gradient: "linear-gradient(135deg, rgba(109, 92, 169, 0.18), rgba(255, 255, 255, 0.8))",
+  },
+  {
+    title: "Momentum",
+    type: "Productivity App",
+    summary:
+      "A task manager that combines reminders, categorization, and real-time syncing to support consistent personal productivity on mobile.",
+    focus: "Flutter productivity patterns with Firebase services and state management.",
+    technologies: ["Flutter", "Dart", "Firebase", "Provider"],
+    image: "/momentum.png",
+    github: "https://github.com/Ade1fe/event_flow",
+    demo: "https://drive.google.com/file/d/1r7wMqivM54BqzuQV50bbvhyT8Hc0axNr/view?usp=sharing",
+    demoLabel: "Watch demo",
+    accent: "#5f8d53",
+    gradient: "linear-gradient(135deg, rgba(95, 141, 83, 0.18), rgba(255, 255, 255, 0.78))",
+  },
+]
+
+const leadProject = projects[0]
+const supportingProjects = projects.slice(1, 4)
+const moreProjects = projects.slice(4)
+
+const frontendSkills = [
+  "React.js",
+  "TypeScript",
+  "JavaScript",
+  "Tailwind CSS",
+  "Chakra UI",
+  "Material UI",
+  "Redux",
+  "Responsive Web Design",
+  "SEO Best Practices",
+]
+
+const mobileSkills = [
+  "Flutter",
+  "Dart",
+  "Firebase",
+  "Android Development",
+  "iOS Development",
+  "GoRouter",
+  "State Management",
+  "Cross-platform Development",
+]
+
+const toolSkills = ["Git & GitHub", "Figma", "REST APIs", "Cloud Firestore", "Firebase Auth", "Node.js", "Code Review"]
+
+const principles = [
+  "Interfaces should feel clean before they feel clever.",
+  "Responsive behavior is part of the design, not a retrofit.",
+  "Reusable systems make product work faster after launch.",
+  "Animation should clarify movement and focus, not distract from it.",
+]
+
+const experience = [
+  {
+    title: "Frontend Developer",
+    company: "Pivelar",
+    location: "Ikeja, Lagos",
+    period: "September 2023 - February 2024",
+    description:
+      "Built modular React features with Chakra UI, improving interface responsiveness and making the frontend easier to scale and demo to clients.",
+    achievements: [
+      "Improved load times and interface responsiveness",
+      "Built reusable UI patterns for faster feature delivery",
+      "Supported design handoff reviews and client demonstrations",
+      "Contributed through code review and team collaboration",
+    ],
+  },
+  {
+    title: "Flutter Developer",
+    company: "Freelance Projects",
+    location: "Remote",
+    period: "January 2023 - Present",
+    description:
+      "Delivered cross-platform mobile builds for commerce, productivity, and operations workflows with Firebase-backed features and polished UI.",
+    achievements: [
+      "Developed responsive layouts across a range of mobile sizes",
+      "Integrated Firebase Auth and Firestore services",
+      "Shipped smoother interactions and animations after debugging bottlenecks",
+      "Published production-ready Android builds",
+    ],
+  },
+  {
+    title: "Frontend Developer Intern",
+    company: "InBrandPr",
+    location: "Ogba, Lagos",
+    period: "March 2022 - December 2022",
+    description:
+      "Translated Figma work into production React interfaces, dashboards, and landing pages with responsive behavior and real-time data support.",
+    achievements: [
+      "Built dashboard components with live Firebase data",
+      "Turned design files into responsive UI with closer visual fidelity",
+      "Worked inside agile routines with standups and sprint delivery",
+      "Supported production deployment workflows",
+    ],
+  },
+]
+
+const education = [
+  {
+    title: "Ordinary National Diploma (OND)",
+    school: "Speedway Polytechnic",
+    location: "Ojodu Berger",
+    period: "April 2022 - Present",
+  },
+  {
+    title: "Diploma in Core Java & Web Development",
+    school: "Nigeria Institute of Information Technology",
+    location: "Nigeria",
+    period: "April 2022 - October 2023",
+  },
+]
+
+const training = [
+  "Frontend Development - freeCodeCamp",
+  "Flutter App Development Bootcamp - Udemy",
+  "React.js Crash Course - Traversy Media",
+  "JavaScript Algorithms & Data Structures - freeCodeCamp",
+]
+
+const socialLinks = [
+  { label: "GitHub", href: "https://github.com/Ade1fe", icon: Github },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/damilola-adeife-oluwadamisi-699325235/?trk=contact-info",
+    icon: Linkedin,
+  },
+  { label: "Email", href: "mailto:addypearl09@gmail.com", icon: Mail },
+]
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Oluwadamisi Damilola",
+  alternateName: "Damisi Damilola",
+  jobTitle: "Frontend and Mobile App Developer",
+  email: "addypearl09@gmail.com",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Lagos",
+    addressCountry: "NG",
+  },
+  sameAs: socialLinks.map((link) => link.href).filter((href) => href.startsWith("http")),
+  url: "https://deife.netlify.app",
+}
+
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string
+  title: string
+  description: string
+}) {
+  return (
+    <div className="max-w-2xl space-y-4">
+      <div className="section-kicker">{eyebrow}</div>
+      <h2 className="section-title max-w-xl text-balance">{title}</h2>
+      <p className="section-copy">{description}</p>
+    </div>
+  )
+}
+
+function FeaturedProjectCard({ project }: { project: Project }) {
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.55 }}
+    >
+      <Card className="glass-panel group overflow-hidden rounded-[30px] border-0 sm:rounded-[34px]">
+        <div className="relative aspect-[5/6] overflow-hidden bg-stone-200/70 sm:aspect-[16/13] lg:aspect-[16/9]">
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            priority
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            sizes="(min-width: 1280px) 80vw, 100vw"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.06),rgba(22,18,16,0.72))]" />
+          <div className="absolute inset-x-0 top-0 flex flex-wrap items-center justify-between gap-2 p-4 sm:p-6">
+            <Badge
+              variant="outline"
+              className="rounded-full border-white/30 bg-black/25 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-stone-50 backdrop-blur-md"
+            >
+              Lead project
+            </Badge>
+            <span className="rounded-full border border-white/20 bg-black/25 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-stone-100 backdrop-blur-md">
+              {project.type}
+            </span>
+          </div>
+          <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 lg:p-8">
+            <div className="max-w-3xl space-y-3">
+              <h3 className="font-[family-name:var(--font-display)] text-[2.35rem] leading-none text-stone-50 sm:text-5xl">
+                {project.title}
+              </h3>
+              <p className="max-w-2xl text-sm leading-7 text-stone-100/92 sm:text-base">
+                {project.summary}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <CardContent className="grid gap-6 p-5 sm:p-6 lg:grid-cols-[1.15fr_0.85fr] lg:p-8">
+          <div className="space-y-4">
+            <p className="text-xs uppercase tracking-[0.22em] text-stone-500">What this project does well</p>
+            <p className="max-w-2xl text-[15px] leading-7 text-stone-700 sm:text-base sm:leading-8">{project.focus}</p>
+          </div>
+
+          <div className="space-y-5">
+            <div className="flex flex-wrap gap-2">
+              {project.technologies.map((tech) => (
+                <Badge
+                  key={tech}
+                  variant="outline"
+                  className="rounded-full border-stone-300 bg-stone-100/80 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-stone-700"
+                >
+                  {tech}
+                </Badge>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <Button asChild className="rounded-full bg-stone-950 px-5 text-stone-50 hover:bg-stone-800">
+                <a href={project.github} target="_blank" rel="noreferrer">
+                  <Github />
+                  Code
+                </a>
+              </Button>
+              {project.demo ? (
+                <Button
+                  asChild
+                  variant="outline"
+                  className="rounded-full border-stone-300 bg-white/70 px-5 text-stone-900 hover:bg-white"
+                >
+                  <a href={project.demo} target="_blank" rel="noreferrer">
+                    <ExternalLink />
+                    {project.demoLabel ?? "Preview"}
+                  </a>
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.article>
+  )
+}
+
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
+      className="h-full"
+    >
+      <Card className="glass-panel group flex h-full flex-col overflow-hidden rounded-[28px] border-0 sm:rounded-[32px]">
+        <div className="relative aspect-[4/3] overflow-hidden bg-stone-200/70">
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            sizes="(min-width: 1280px) 26vw, (min-width: 768px) 40vw, 100vw"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.04),rgba(22,18,16,0.52))]" />
+          <div className="absolute left-4 top-4">
+            <Badge
+              variant="outline"
+              className="rounded-full border-white/25 bg-black/25 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-stone-50 backdrop-blur-md"
+            >
+              {project.type}
+            </Badge>
+          </div>
+          <div
+            className="absolute bottom-4 right-4 h-12 w-12 rounded-full border border-white/35 backdrop-blur-md"
+            style={{ background: project.gradient }}
+          />
+        </div>
+
+        <CardContent className="flex flex-1 flex-col p-5 sm:p-6">
+          <div className="space-y-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.22em] text-stone-500">
+                {String(index + 1).padStart(2, "0")}
+              </p>
+              <h3 className="mt-2 font-[family-name:var(--font-display)] text-[2rem] leading-none text-stone-950 sm:text-3xl">
+                {project.title}
+              </h3>
+            </div>
+            <p className="text-sm leading-6 text-stone-600 sm:leading-7">{project.summary}</p>
+            <p className="text-sm leading-6 text-stone-800 sm:leading-7">{project.focus}</p>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-2">
+            {project.technologies.map((tech) => (
+              <Badge
+                key={tech}
+                variant="outline"
+                className="rounded-full border-stone-300 bg-stone-100/80 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-stone-700"
+              >
+                {tech}
+              </Badge>
+            ))}
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button asChild className="rounded-full bg-stone-950 px-5 text-stone-50 hover:bg-stone-800">
+              <a href={project.github} target="_blank" rel="noreferrer">
+                <Github />
+                Code
+              </a>
+            </Button>
+            {project.demo ? (
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-full border-stone-300 bg-white/70 px-5 text-stone-900 hover:bg-white"
+              >
+                <a href={project.demo} target="_blank" rel="noreferrer">
+                  <ExternalLink />
+                  {project.demoLabel ?? "Preview"}
+                </a>
+              </Button>
+            ) : null}
+          </div>
+        </CardContent>
+      </Card>
+    </motion.article>
+  )
+}
+
+function CompactProjectCard({ project, index }: { project: Project; index: number }) {
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.5, delay: index * 0.06 }}
+    >
+      <Card className="glass-panel h-full rounded-[28px] border-0 sm:rounded-[30px]">
+        <CardContent className="grid gap-5 p-5 sm:grid-cols-[124px_1fr]">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[22px] bg-stone-200/60">
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              className="object-cover"
+              sizes="124px"
+            />
+          </div>
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-xs uppercase tracking-[0.22em] text-stone-500">
+                {String(index + 5).padStart(2, "0")}
+              </p>
+              <Badge
+                variant="outline"
+                className="rounded-full border-stone-300 bg-white/80 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-stone-700"
+              >
+                {project.type}
+              </Badge>
+            </div>
+            <h3 className="font-[family-name:var(--font-display)] text-[2rem] leading-none text-stone-950 sm:text-3xl">
+              {project.title}
+            </h3>
+            <p className="text-sm leading-6 text-stone-600">{project.summary}</p>
+            <div className="flex flex-wrap gap-2">
+              {project.technologies.map((tech) => (
+                <Badge
+                  key={tech}
+                  variant="outline"
+                  className="rounded-full border-stone-300 bg-stone-100/80 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-stone-700"
+                >
+                  {tech}
+                </Badge>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-full border-stone-300 bg-white/70 text-stone-900 hover:bg-white"
+              >
+                <a href={project.github} target="_blank" rel="noreferrer">
+                  <Github />
+                  Code
+                </a>
+              </Button>
+              {project.demo ? (
+                <Button asChild className="rounded-full bg-stone-950 text-stone-50 hover:bg-stone-800">
+                  <a href={project.demo} target="_blank" rel="noreferrer">
+                    <ExternalLink />
+                    {project.demoLabel ?? "Preview"}
+                  </a>
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.article>
+  )
+}
 
 export default function Portfolio() {
+  const reduceMotion = useReducedMotion()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState("home")
-  const [formData, setFormData] = useState({
+  const [activeSection, setActiveSection] = useState<SectionId>("home")
+  const [formData, setFormData] = useState<ContactFormState>({
     name: "",
     email: "",
     message: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<{
-    type: "success" | "error" | ""
-    message: string
-  }>({ type: "", message: "" })
-
-  const { scrollYProgress } = useScroll()
-  const progressRef = useRef(null)
-  const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
+  const [submitState, setSubmitState] = useState<SubmitState>({
+    type: "",
+    message: "",
+  })
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = ["home", "about", "skills", "projects", "experience", "contact"]
-      const scrollPosition = window.scrollY + 200 // Increased offset for better detection
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((left, right) => right.intersectionRatio - left.intersectionRatio)
 
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i]
-        const element = document.getElementById(section)
-        if (element) {
-          const offsetTop = element.offsetTop
-
-          if (scrollPosition >= offsetTop) {
-            setActiveSection(section)
-            break
-          }
+        if (visibleEntries[0]) {
+          setActiveSection(visibleEntries[0].target.id as SectionId)
         }
-      }
-    }
+      },
+      {
+        rootMargin: "-18% 0px -48% 0px",
+        threshold: [0.2, 0.35, 0.55],
+      },
+    )
 
-    window.addEventListener("scroll", handleScroll)
-    handleScroll() // Call once to set initial state
-    return () => window.removeEventListener("scroll", handleScroll)
+    navigation.forEach(({ id }) => {
+      const element = document.getElementById(id)
+      if (element) observer.observe(element)
+    })
+
+    return () => observer.disconnect()
   }, [])
 
-  const scrollToSection = (sectionId: string) => {
+  const metrics = [
+    { value: `${projects.length}+`, label: "portfolio builds" },
+    { value: `${experience.length}`, label: "professional roles" },
+    { value: "Web + Mobile", label: "product delivery" },
+  ]
+
+  const scrollToSection = (sectionId: SectionId) => {
+    setIsMenuOpen(false)
+
     const element = document.getElementById(sectionId)
-    if (element) {
-      // Close mobile menu first
-      setIsMenuOpen(false)
+    if (!element) return
 
-      // Add a small delay to allow menu to close, then scroll
-      setTimeout(() => {
-        const yOffset = -80 // Account for fixed header
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
-        window.scrollTo({ top: y, behavior: "smooth" })
-      }, 100)
-    }
+    const yOffset = -88
+    const yPosition = element.getBoundingClientRect().top + window.scrollY + yOffset
+
+    window.scrollTo({
+      top: yPosition,
+      behavior: "smooth",
+    })
   }
 
-  // Function to handle CV download
   const handleDownloadCV = () => {
- 
-
-    // The code below will work after deployment when your CV file exists
-    const link = document.createElement("a");
-    link.href = "/cv/Oluwadamisi_Damilola_CV.pdf";
-    link.download = "Oluwadamisi_Damilola_CV.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const link = document.createElement("a")
+    link.href = "/cv/Oluwadamisi_Damilola_CV.pdf"
+    link.download = "Oluwadamisi_Damilola_CV.pdf"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
   }
 
-  // Handle form input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
+  const openMailFallback = (mailtoData: { to: string; subject: string; body: string }) => {
+    const params = new URLSearchParams({
+      subject: mailtoData.subject,
+      body: mailtoData.body,
+    })
+
+    window.location.href = `mailto:${mailtoData.to}?${params.toString()}`
+  }
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target
+
+    setFormData((current) => ({
+      ...current,
       [name]: value,
     }))
   }
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     setIsSubmitting(true)
-    setSubmitStatus({ type: "", message: "" })
+    setSubmitState({ type: "", message: "" })
 
     try {
-      // Send email using server action
       const result = await sendContactEmail(formData)
 
       if (result.success) {
-    
-        setSubmitStatus({
-          type: "success",
-          message: result.message,
-        })
-        // Reset form
+        if (result.fallback && result.mailtoData) {
+          openMailFallback(result.mailtoData)
+        }
+
         setFormData({ name: "", email: "", message: "" })
+        setSubmitState({ type: "success", message: result.message })
       } else {
-        setSubmitStatus({
+        setSubmitState({
           type: "error",
-          message: result.message || "Failed to send message. Please try again later.",
+          message: result.message || "I could not send your message. Please try again later.",
         })
       }
-    } catch (error) {
-      setSubmitStatus({
+    } catch {
+      setSubmitState({
         type: "error",
         message: "An unexpected error occurred. Please try again later.",
       })
@@ -148,1356 +706,760 @@ export default function Portfolio() {
     }
   }
 
-const frontendSkills = [
-  "React.js",
-  "JavaScript",
-  "TypeScript",
-  "HTML5",
-  "CSS3",
-  "Tailwind CSS",
-  "Chakra UI",
-  "Material UI",
-  "Redux",
-  "React Router",
-  "State Management",
-  "API Integration",
-  "Responsive Web Design",
-  "SEO Best Practices",
-  "Code Review & Collaboration",
-];
-
-
-const mobileSkills = [
-  "Flutter",
-  "Dart",
-  "Firebase",
-  "Android Development",
-  "iOS Development",
-  "Cross-platform Development",
-  "State Management",
-  "GoRouter",
-  "API Integration",
-  "UI/UX Design",
-  "Responsive Design",
-  // "Version Control (Git)",  
-]
-
-
-const toolsSkills = [
-  "Git & GitHub",
-  "Visual Studio Code",
-  "Figma",
-  "Firebase Auth",
-  "Cloud Firestore",
-  "Node.js",
-  "REST APIs",
-];
-
-// ProjectsSection
-// const [sliderRef] = useKeenSlider({
-//   loop: false,
-//   mode: "free-snap",
-//   slides: {
-//     perView: 1.1,
-//     spacing: 0,
-//   },
-//   breakpoints: {
-//      "(min-width: 498px)": {
-//       slides: { perView: 1.50, spacing: 4 },
-//     },
-//     "(min-width: 768px)": {
-//       slides: { perView: 2.2, spacing: 14 },
-//     },
-//      "(min-width: 868px)": {
-//       slides: { perView: 2.30, spacing: 14 },
-//     },
-//     "(min-width: 1024px)": {
-//       slides: { perView: 2.50, spacing: 2 },
-//     },
-//   },
-// });
-
-
-const [currentSlide, setCurrentSlide] = useState(0)
-const paginationRef = useRef<HTMLDivElement>(null)
-
-const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>(
-  {
-    loop: false,
-    mode: "free-snap",
-    slides: {
-      perView: 1.1,
-      spacing: 0,
-    },
-    breakpoints: {
-      "(min-width: 498px)": {
-        slides: { perView: 1.5, spacing: 4 },
-      },
-      "(min-width: 768px)": {
-        slides: { perView: 2.2, spacing: 14 },
-      },
-      "(min-width: 868px)": {
-        slides: { perView: 2.3, spacing: 14 },
-      },
-      "(min-width: 1024px)": {
-        slides: { perView: 2.5, spacing: 2 },
-      },
-    },
-    slideChanged(slider) {
-      setCurrentSlide(slider.track.details.rel)
-    },
-  },
-  [PaginationPlugin(paginationRef)]
-)
-
-
-
-function PaginationPlugin(paginationRef: React.RefObject<HTMLDivElement>) {
-  return (slider: any) => {
-    const update = () => {
-      const children = paginationRef.current?.children
-      if (children) {
-        Array.from(children).forEach((dot, index) => {
-          if (dot instanceof HTMLElement) {
-            dot.classList.toggle("bg-cyan-500", index === slider.track.details.rel)
-            dot.classList.toggle("bg-slate-600", index !== slider.track.details.rel)
-          }
-        })
-      }
-    }
-
-    slider.on("created", () => update())
-    slider.on("slideChanged", () => update())
-  }
-}
-  
-
-  const projects = [
-{
-  title: "Jma Couture",
-  description:
-    "A modern fashion e-commerce web application designed to showcase collections, manage product listings, and deliver a smooth shopping experience. The platform features a clean, responsive user interface, seamless navigation, and real-time data handling to support product updates and customer engagement.",
-  technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
-  github: "https://github.com/Ade1fe?tab=repositories",
-  demo: "https://jma-rich.vercel.app",
-  image: "/jma.png",
-  type: "Web Application",
-  color: "from-rose-500 to-fuchsia-600",
-},
-{
-  title: "FinoSell Approvals",
-  description:
-    "A production-ready mobile finance and approval management application published on the Google Play Store. The app enables users to send and receive money, approve or reject requests, monitor financial activities, and download transaction receipts. It features secure authentication, real-time updates, and a streamlined user experience for managing business approvals and finances on the go.",
-  technologies: ["Flutter", "Dart", "Firebase", "REST APIs"],
-  github: "https://github.com/Ade1fe?tab=repositories",
-  // demo: "https://finosell.com/",
-  image: "/approvals.png",
-  type: "Mobile Application",
-  color: "from-rose-500 to-fuchsia-600",
-}
-
-
-,{
-  title: "FinoSell Dashboard",
-  description:
-    "A scalable business management dashboard built for company executives to manage teams, approval workflows, and operational activities. The application supports role-based access control, dynamic dashboards, and secure authentication. Deployed on Render to ensure reliable hosting, environment management, and production readiness.",
-  technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
-  github: "https://github.com/Ade1fe?tab=repositories",
-  // demo: "",
-  image: "/finosell.png",
-  type: "Web Application",
-  color: "from-rose-500 to-fuchsia-600",
-}
-,{
-  title: "MediSwift App",
-  description:
-    "A Flutter-based healthcare logistics mobile application designed for riders to deliver hospital and medical equipment efficiently. The app enables task assignment, delivery tracking, real-time status updates, and reliable communication to support time-sensitive medical deliveries with a smooth and optimized user experience.",
-  technologies: ["Flutter", "Dart", "Firebase", "REST APIs"],
-  github: "https://github.com/Ade1fe?tab=repositories",
-  // demo: "https://finosell.com/",
-  image: "/mediswift.png",
-  type: "Mobile Application",
-  color: "from-rose-500 to-fuchsia-600",
-}
-
-
-
-,{
-  title: "Smart Learning Academy",
-  description:
-    "An education-focused web platform designed to connect tutors with students while enabling parents to monitor academic progress. The application provides tools for class management, session tracking, and performance reporting. Deployed on Render to support scalability, secure deployments, and continuous delivery.",
-  technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
-  github: "https://github.com/Ade1fe?tab=repositories",
-  // demo: "",
-  image: "/school.png",
-  type: "Web Application",
-  color: "from-rose-500 to-fuchsia-600",
-}
-
-,
-
-  {
-  title: "Cut2Fit Moda",
-  description:
-    "An elegant e-commerce platform for custom and ready-to-wear fashion pieces. Built with React and Firebase, it features dynamic product listings, role-based dashboards for admins and customers, and seamless cart & checkout functionality. Designed with fashion-forward UI using Chakra UI.",
-  technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
-  github: "https://github.com/Ade1fe?tab=repositories",
-  demo: "https://cut2fit-moda.netlify.app", 
-  image: "/cut2fit.png",
-  type: "Web Application",
-  color: "from-rose-500 to-fuchsia-600",
-},
-
-
-{
-  title: "Gomine Food",
-  description:
-    "A sleek and intuitive Flutter recipe app powered by the MealDB API. Users can browse, search, and view detailed meal recipes with images and instructions. The app uses Firebase for backend integration and GoRouter for seamless navigation.",
-  technologies: ["Flutter", "Dart", "MealDB API", "Firebase", "GoRouter"],
-  github: "https://github.com/Ade1fe/gomine-food-2.0",
-  demo: "https://drive.google.com/file/d/1G5JwRtUCNM7t87egQcDoGAKM_lwIof3P/view?usp=sharing", 
-  image: "/gominefood.png",
-  type: "Mobile Application",
-  color: "from-blue-400 to-emerald-500"
-},
-{
-  title: "Kin – Fintech",
-  description:
-    "A modern and elegant landing page for Kin, a fintech product designed to empower families and loved ones to manage finances, automate payments, and grow wealth together. The site highlights Kin's features, encourages user engagement, and includes a waitlist form to collect early access signups.",
-  technologies: ["React", "Tailwind CSS", "JavaScript", "Responsive Design"],
-  github: "https://github.com/Ade1fe/kin", 
-  demo: "https://ki-n.netlify.app",   
-  image: "/kin.png",
-  type: "Web Application",
-  color: "from-yellow-500 to-purple-500"
-},
-{
-  title: "Momentum",
-  description:
-    "Momentum is a modern and intuitive Flutter task manager app built to boost productivity. It allows users to create, categorize, and manage daily tasks with features like deadlines, reminders, and progress tracking. The app uses Firebase for backend services like authentication and real-time data syncing, while Provider handles efficient state management.",
-  technologies: ["Flutter", "Dart", "Firebase", "Provider"],
-  github: "https://github.com/Ade1fe/event_flow",
-  demo: "https://drive.google.com/file/d/1r7wMqivM54BqzuQV50bbvhyT8Hc0axNr/view?usp=sharing", 
-  image: "/momentum.png",
-  type: "Mobile Application",
-  color: "from-green-400 to-orange-500"
-}
-
-  ]
-
-  const experience = [
-    {
-      title: "Frontend Developer",
-      company: "Pivelar",
-      location: "Ikeja, Lagos",
-      period: "September 2023 - February 2024",
-      description:
-        "Engineered multiple frontend features using React.js with Chakra UI, improving load times and interface responsiveness. Implemented reusable components and modular structure for scalable frontend code.",
-      achievements: [
-        "Improved load times and interface responsiveness",
-        "Built reusable components and modular architecture",
-        "Contributed to design handoff reviews and client demonstrations",
-        "Mentored junior developers through code reviews",
-      ],
-      color: "bg-gradient-to-r from-pink-500 to-rose-500",
-    },
-    {
-      title: "Flutter Developer (Freelance)",
-      company: "Remote Projects",
-      location: "Remote",
-      period: "January 2023 - Present",
-      description:
-        "Built and deployed Flutter apps for Android, including e-commerce UI and personal expense tracker. Used Firebase Auth & Firestore for authentication and cloud storage.",
-      achievements: [
-        "Developed responsive UIs compatible across multiple screen sizes",
-        "Integrated Firebase Auth & Firestore for backend services",
-        "Debugged performance issues and implemented smooth animations",
-        "Successfully deployed apps to Android platform",
-      ],
-      color: "bg-gradient-to-r from-cyan-500 to-blue-500",
-    },
-    {
-      title: "Frontend Developer (Intern)",
-      company: "InBrandPr",
-      location: "Ogba, Lagos",
-      period: "March 2022 - December 2022",
-      description:
-        "Built functional dashboards and landing pages using React + Firebase stack. Translated Figma designs into pixel-perfect components with responsive behavior.",
-      achievements: [
-        "Created custom components with real-time data sync",
-        "Translated Figma designs into pixel-perfect components",
-        "Participated in daily standups and agile sprints",
-        "Deployed production-ready builds",
-      ],
-      color: "bg-gradient-to-r from-violet-500 to-purple-500",
-    },
-  ]
-
-  const education = [
-    {
-      institution: "Speedway Polytechnic",
-      degree: "Ordinary National Diploma (OND)",
-      location: "Ojodu Berger",
-      period: "April 2022 - Present",
-      color: "from-pink-500 to-rose-500",
-    },
-    {
-      institution: "Nigeria Institute of Information Technology",
-      degree: "Diploma in Core Java & Web Development",
-      location: "Nigeria",
-      period: "April 2022 - October 2023",
-      color: "from-cyan-500 to-blue-500",
-    },
-  ]
-
-  const courses = [
-    {
-      name: "Frontend Development - freeCodeCamp",
-      color: "text-pink-500",
-    },
-    {
-      name: "Flutter App Development Bootcamp - Udemy (Angela Yu)",
-      color: "text-cyan-500",
-    },
-    {
-      name: "React.js Crash Course - YouTube / Traversy Media",
-      color: "text-violet-500",
-    },
-    {
-      name: "JavaScript Algorithms & Data Structures - freeCodeCamp (In Progress)",
-      color: "text-amber-500",
-    },
-  ]
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-white">
-      {/* Progress Bar */}
-      <div className="fixed top-0 left-0 right-0 h-1 bg-slate-700 z-50">
-        <motion.div
-          className="h-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500"
-          style={{ width: progressHeight }}
-          ref={progressRef}
-        />
+    <main className="relative overflow-hidden pb-16">
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="ambient-orb left-[-12rem] top-[-8rem] h-[28rem] w-[28rem] bg-[radial-gradient(circle,_rgba(199,95,55,0.24),_transparent_68%)]" />
+        <div className="ambient-orb right-[-10rem] top-[18rem] h-[26rem] w-[26rem] bg-[radial-gradient(circle,_rgba(34,89,138,0.18),_transparent_66%)]" />
+        <div className="ambient-orb bottom-[-12rem] left-[18%] h-[30rem] w-[30rem] bg-[radial-gradient(circle,_rgba(95,141,83,0.18),_transparent_68%)]" />
       </div>
 
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-slate-900/80 backdrop-blur-md z-40 border-b border-slate-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500"
+      <nav className="sticky top-3 z-50 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="glass-panel flex items-center justify-between rounded-[24px] px-3 py-3 sm:rounded-[30px] sm:px-4">
+            <button
+              onClick={() => scrollToSection("home")}
+              className="flex items-center gap-3 rounded-full px-2 py-1 text-left"
+              aria-label="Scroll to home"
             >
-              {"<Deife. />"}
-            </motion.div>
+              <span className="font-[family-name:var(--font-display)] text-2xl italic tracking-wide text-stone-950">
+                Deife
+              </span>
+              <span className="hidden text-[11px] uppercase tracking-[0.22em] text-stone-500 sm:inline">
+                Portfolio 2026
+              </span>
+            </button>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-8">
-              {["home", "about", "skills", "projects", "experience", "contact"].map((item, index) => (
-                <motion.button
-                  key={item}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  onClick={() => scrollToSection(item)}
-                  className={`capitalize transition-colors ${
-                    activeSection === item
-                      ? "text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 font-semibold"
-                      : "text-slate-300 hover:text-white"
-                  }`}
-                >
-                  {item}
-                </motion.button>
-              ))}
-            </div>
-
-            {/* CV Download Button in Navigation */}
-            <div className="hidden md:flex items-center space-x-4">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Button
-                  onClick={handleDownloadCV}
-                  size="sm"
-                  className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white border-0"
-                >
-                  <Download className="mr-2" size={16} />
-                  CV
-                </Button>
-              </motion.div>
-            </div>
-
-            {/* Mobile Navigation Toggle */}
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden text-white p-2 touch-manipulation"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              style={{ minHeight: "44px", minWidth: "44px" }}
-              aria-label="Toggle navigation menu"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </motion.button>
-          </div>
-
-          {/* Mobile Navigation Menu */}
-          <AnimatePresence>
-            {isMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="md:hidden py-4 border-t border-slate-700 bg-slate-900/95 backdrop-blur-md"
-                style={{ zIndex: 50 }}
-              >
-                <div className="space-y-2">
-                  {["home", "about", "skills", "projects", "experience", "contact"].map((item, index) => (
-                    <motion.button
-                      key={item}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.05 }}
-                      onClick={() => scrollToSection(item)}
-                      className={`block w-full text-left py-3 px-4 capitalize transition-all duration-200 touch-manipulation rounded-md ${
-                        activeSection === item
-                          ? "text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 font-semibold bg-slate-800/50"
-                          : "text-slate-300 hover:text-white hover:bg-slate-800/50"
-                      }`}
-                      style={{ minHeight: "44px" }}
-                    >
-                      {item}
-                    </motion.button>
-                  ))}
-                  {/* Mobile CV Download */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: 0.3 }}
-                    className="pt-2 px-4"
+            <div className="hidden lg:flex">
+              <div className="flex items-center gap-1 rounded-full border border-stone-800/10 bg-white/60 p-1">
+                {navigation.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`rounded-full px-4 py-2 text-sm transition ${
+                      activeSection === item.id
+                        ? "bg-stone-950 text-stone-50"
+                        : "text-stone-600 hover:bg-white hover:text-stone-950"
+                    }`}
                   >
-                    <Button
-                      onClick={handleDownloadCV}
-                      size="sm"
-                      className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white border-0 touch-manipulation"
-                      style={{ minHeight: "44px" }}
-                    >
-                      <Download className="mr-2" size={16} />
-                      Download CV
-                    </Button>
-                  </motion.div>
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="hidden items-center gap-3 xl:flex">
+              <Button
+                variant="outline"
+                onClick={handleDownloadCV}
+                className="rounded-full border-stone-300 bg-white/60 text-stone-900 hover:bg-white"
+              >
+                <Download />
+                Resume
+              </Button>
+              <Button
+                onClick={() => scrollToSection("contact")}
+                className="rounded-full bg-stone-950 text-stone-50 hover:bg-stone-800"
+              >
+                <Mail />
+                Hire me
+              </Button>
+            </div>
+
+            <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+              <SheetTrigger asChild>
+                <button
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-stone-300 bg-white/70 text-stone-900 lg:hidden"
+                  aria-label="Open navigation"
+                >
+                  <Menu />
+                </button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="w-[88vw] border-l-stone-200 bg-[#f6efe6] p-0 text-stone-900 sm:max-w-sm"
+              >
+                <div className="flex h-full flex-col">
+                  <SheetHeader className="border-b border-stone-200 px-6 py-6 text-left">
+                    <SheetTitle className="font-[family-name:var(--font-display)] text-4xl leading-none text-stone-950">
+                      Navigate
+                    </SheetTitle>
+                    <SheetDescription className="text-sm leading-6 text-stone-600">
+                      Jump to any section or open your resume directly.
+                    </SheetDescription>
+                  </SheetHeader>
+
+                  <div className="flex-1 space-y-2 px-4 py-5">
+                    {navigation.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => scrollToSection(item.id)}
+                        className={`flex w-full items-center justify-between rounded-[22px] px-4 py-4 text-left text-base transition ${
+                          activeSection === item.id
+                            ? "bg-stone-950 text-stone-50"
+                            : "bg-white/70 text-stone-700 hover:bg-white"
+                        }`}
+                      >
+                        <span>{item.label}</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="border-t border-stone-200 px-4 py-4">
+                    <div className="grid gap-2">
+                      <Button
+                        variant="outline"
+                        onClick={handleDownloadCV}
+                        className="h-12 rounded-[22px] border-stone-300 bg-white/80 text-stone-900 hover:bg-white"
+                      >
+                        <Download />
+                        Download CV
+                      </Button>
+                      <Button
+                        onClick={() => scrollToSection("contact")}
+                        className="h-12 rounded-[22px] bg-stone-950 text-stone-50 hover:bg-stone-800"
+                      >
+                        <Mail />
+                        Start a conversation
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section id="home" className="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center py-20">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="mb-8"
-            >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.3, type: "spring" }}
-                className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 p-1"
-              >
-                <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center">
-                  <div className="flex space-x-2">
-                    <Monitor size={24} className="text-pink-500" />
-                    <Smartphone size={24} className="text-cyan-500" />
-                  </div>
-                </div>
-              </motion.div>
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="text-5xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500"
-              >
-                Oluwadamisi Damilola
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.7 }}
-                className="text-xl md:text-2xl text-slate-300 mb-8"
-              >
-                Frontend & Mobile App Developer
-              </motion.p>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.9 }}
-                className="text-lg text-slate-400 max-w-2xl mx-auto mb-8"
-              >
-                Creative and performance-driven developer specialized in building intuitive, responsive, and scalable
-                applications using React.js for web and Flutter for mobile platforms.
-              </motion.p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.1 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
-            >
-              <Button
-                size="lg"
-                onClick={() => scrollToSection("contact")}
-                className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white border-0"
-              >
-                <Mail className="mr-2" size={20} />
-                Get In Touch
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={handleDownloadCV}
-                className="border-purple-500 text-purple-500 hover:bg-purple-500/10 group"
-              >
-                <Download className="mr-2 group-hover:animate-bounce" size={20} />
-                Download Resume
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => window.open("/cv/Oluwadamisi_Damilola_CV.pdf", "_blank")}
-                className="border-cyan-500 text-cyan-500 hover:bg-cyan-500/10"
-              >
-                <FileText className="mr-2" size={20} />
-                View CV
-              </Button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.3 }}
-              className="flex justify-center space-x-6"
-            >
-              <motion.a
-                whileHover={{ scale: 1.2 }}
-                href="https://github.com/Ade1fe"
-                className="text-slate-400 hover:text-pink-500 transition-colors"
-              >
-                <Github size={24} />
-              </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.2 }}
-                href="https://www.linkedin.com/in/damilola-adeife-oluwadamisi-699325235/?trk=contact-info"
-                className="text-slate-400 hover:text-purple-500 transition-colors"
-              >
-                <Linkedin size={24} />
-              </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.2 }}
-                href="mailto:addypearl09@gmail.com"
-                className="text-slate-400 hover:text-cyan-500 transition-colors"
-              >
-                <Mail size={24} />
-              </motion.a>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 1.5 }}
-              className="mt-16"
-            >
-              <motion.div animate={{ y: [0, 10, 0] }} transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}>
-                <ChevronDown size={32} className="mx-auto text-slate-500" />
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-800/50">
-        <div className="max-w-7xl mx-auto">
+      <section id="home" className="scroll-mt-28 px-4 pb-16 pt-12 sm:px-6 lg:px-8 lg:pb-24 lg:pt-16">
+        <div className="mx-auto grid max-w-7xl items-start gap-10 xl:grid-cols-[1.02fr_0.98fr] xl:items-center xl:gap-12">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65 }}
+            className="max-w-4xl space-y-8"
           >
-            <h2 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
-              About Me
-            </h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-pink-500 to-purple-500 mx-auto"></div>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 rounded-lg blur-sm"></div>
-                <div className="relative bg-slate-800 rounded-lg overflow-hidden">
-                  {/* CORRECT WAY TO ADD YOUR IMAGE */}
-                  <img
-                    src="/aboutme.jpg"
-                    alt="Oluwadamisi Damilola - Frontend & Mobile Developer"
-                    className="w-full object-cover rounded-lg"
-                    style={{ aspectRatio: "1/1" }}
-                  />
-                </div>
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <h3 className="text-2xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
-                Hello! I'm Damisi, a passionate Frontend & Mobile Developer.
-              </h3>
-              <p className="text-slate-300 mb-6">
-                I am passionate about creating seamless user experiences, implementing clean code practices, and
-                continuously improving development workflows. As an enthusiastic team player, I have strong
-                collaboration, debugging, and design interpretation skills.
-              </p>
-              <p className="text-slate-300 mb-6">
-                I specialize in React.js for web development and Flutter for cross-platform mobile applications, always
-                focusing on performance optimization and user experience.
-              </p>
-
-              <div className="grid grid-cols-1 gap-4 text-sm text-slate-300 mb-6">
-                <div className="flex items-center">
-                  <MapPin className="mr-2 text-pink-500" size={16} />
-                  <span>Lagos, Nigeria</span>
-                </div>
-                <div className="flex items-center">
-                  <Mail className="mr-2 text-purple-500" size={16} />
-                  <span>addypearl09@gmail.com</span>
-                </div>
-                <div className="flex items-center">
-                  <Code className="mr-2 text-cyan-500" size={16} />
-                  <span>React.js & Flutter Specialist</span>
-                </div>
-              </div>
-
-              {/* CV Download in About Section */}
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-1  items-start mb-6">
-                <Button
-                  onClick={handleDownloadCV}
-                  className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white border-0 mr-4"
-                >
-                  <Download className="mr-2" size={16} />
-                  Download Full CV
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => window.open("/cv/Oluwadamisi_Damilola_CV.pdf", "_blank")}
-                  className="border-purple-500 text-purple-500 hover:bg-purple-500/10"
-                >
-                  <FileText className="mr-2" size={16} />
-                  View Online
-                </Button>
-              </div>
-
-              <div className="mt-6">
-                <h4 className="font-semibold text-slate-200 mb-3">Core Strengths:</h4>
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <motion.span
-                    whileHover={{ scale: 1.05 }}
-                    className="flex items-center bg-slate-700/50 p-2 rounded-md"
-                  >
-                    <span className="w-2 h-2 bg-pink-500 rounded-full mr-2"></span>Creative Problem Solving
-                  </motion.span>
-                  <motion.span
-                    whileHover={{ scale: 1.05 }}
-                    className="flex items-center bg-slate-700/50 p-2 rounded-md"
-                  >
-                    <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>Time Management
-                  </motion.span>
-                  <motion.span
-                    whileHover={{ scale: 1.05 }}
-                    className="flex items-center bg-slate-700/50 p-2 rounded-md"
-                  >
-                    <span className="w-2 h-2 bg-cyan-500 rounded-full mr-2"></span>Attention to Detail
-                  </motion.span>
-                  <motion.span
-                    whileHover={{ scale: 1.05 }}
-                    className="flex items-center bg-slate-700/50 p-2 rounded-md"
-                  >
-                    <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>Fast Learner
-                  </motion.span>
-                  <motion.span
-                    whileHover={{ scale: 1.05 }}
-                    className="flex items-center bg-slate-700/50 p-2 rounded-md"
-                  >
-                    <span className="w-2 h-2 bg-amber-500 rounded-full mr-2"></span>Team Collaboration
-                  </motion.span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Skills Section */}
-      <section id="skills" className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500">
-              Skills & Technologies
-            </h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-purple-500 to-cyan-500 mx-auto"></div>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <Card className="bg-slate-800/50 border-slate-700 overflow-hidden">
-                <div className="h-2 bg-gradient-to-r from-pink-500 to-rose-500"></div>
-                <CardHeader>
-                  <CardTitle className="flex items-center text-white">
-                    <Monitor className="mr-2 text-pink-500" />
-                    Frontend Development
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {frontendSkills.map((skill, index) => (
-                      <motion.div
-                        key={skill}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                      >
-                        <Badge
-                          variant="outline"
-                          className="bg-slate-700/50 text-slate-200 border-pink-500/50 hover:bg-pink-500/10"
-                        >
-                          {skill}
-                        </Badge>
-                      </motion.div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <Card className="bg-slate-800/50 border-slate-700 overflow-hidden">
-                <div className="h-2 bg-gradient-to-r from-cyan-500 to-blue-500"></div>
-                <CardHeader>
-                  <CardTitle className="flex items-center text-white">
-                    <Smartphone className="mr-2 text-cyan-500" />
-                    Mobile Development
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {mobileSkills.map((skill, index) => (
-                      <motion.div
-                        key={skill}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                      >
-                        <Badge
-                          variant="outline"
-                          className="bg-slate-700/50 text-slate-200 border-cyan-500/50 hover:bg-cyan-500/10"
-                        >
-                          {skill}
-                        </Badge>
-                      </motion.div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <Card className="bg-slate-800/50 border-slate-700 overflow-hidden">
-                <div className="h-2 bg-gradient-to-r from-violet-500 to-purple-500"></div>
-                <CardHeader>
-                  <CardTitle className="flex items-center text-white">
-                    <Code className="mr-2 text-violet-500" />
-                    Tools & Others
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {toolsSkills.map((skill, index) => (
-                      <motion.div
-                        key={skill}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                      >
-                        <Badge
-                          variant="outline"
-                          className="bg-slate-700/50 text-slate-200 border-violet-500/50 hover:bg-violet-500/10"
-                        >
-                          {skill}
-                        </Badge>
-                      </motion.div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      {/* <section id="projects" className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-800/50">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
-              Featured Projects
-            </h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 mx-auto"></div>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-              >
-                <Card className="bg-slate-800/50 border-slate-700 overflow-hidden h-full">
-                  <div className={`h-2 bg-gradient-to-r ${project.color}`}></div>
-                  <div className="aspect-video bg-slate-700 relative overflow-hidden group">
-                    <img
-                      src={project.image || "/placeholder.svg"}
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="outline" asChild className="bg-slate-800/80 text-white border-0">
-                          <a href={project.github} target="_blank" rel="noopener noreferrer">
-                            <Github className="mr-1" size={16} />
-                            Code
-                          </a>
-                        </Button>
-                        <Button size="sm" asChild className={`bg-gradient-to-r ${project.color} border-0`}>
-                          <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="mr-1" size={16} />
-                            Demo
-                          </a>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg text-white">{project.title}</CardTitle>
-                      <Badge
-                        variant="outline"
-                        className={`text-xs bg-gradient-to-r ${project.color} text-white border-0`}
-                      >
-                        {project.type}
-                      </Badge>
-                    </div>
-                    <CardDescription className="text-slate-300">{project.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.technologies.map((tech) => (
-                        <Badge key={tech} variant="outline" className="bg-slate-700/50 text-slate-200 border-slate-600">
-                          {tech}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section> */}
-
-
-      <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-  <div className="max-w-7xl mx-auto">
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="text-center mb-12"
-    >
-      <h2 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
-        Featured Projects
-      </h2>
-      <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 mx-auto rounded-full"></div>
-    </motion.div>
-
-    <div ref={sliderRef} className="keen-slider -mx-4 px-1 sm:px-2 lg:px-4">
-      {projects.map((project, index) => (
-        <motion.div
-          key={index}
-          className="keen-slider__slide px-4 md:px-5 lg:px-6"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: index * 0.1 }}
-        >
-          <Card className="bg-slate-800/70 border border-slate-700  overflow-hidden h-full shadow-lg hover:shadow-cyan-700/20 transition-shadow duration-300">
-            <div className={`h-1.5 bg-gradient-to-r ${project.color}`}></div>
-            <div className="aspect-video bg-slate-700 relative overflow-hidden group">
-              <img
-                src={project.image || "/placeholder.svg"}
-                alt={project.title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" asChild className="bg-slate-800/80 text-white border-0">
-                    <a href={project.github} target="_blank" rel="noopener noreferrer">
-                      <Github className="mr-1" size={16} />
-                      Code
-                    </a>
-                  </Button>
-                  <Button size="sm" asChild className={`bg-gradient-to-r ${project.color} border-0`}>
-                    <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="mr-1" size={16} />
-                      Demo
-                    </a>
-                  </Button>
-                </div>
-              </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-stone-300/80 bg-white/70 px-4 py-2 text-xs uppercase tracking-[0.22em] text-stone-700">
+              <Sparkles className="h-4 w-4 text-[#c6633f]" />
+              React and Flutter product developer
             </div>
-            <CardHeader className="p-4">
-              <div className="flex items-center justify-between mb-2">
-                <CardTitle className="text-white text-sm  md:text-md lg:text-lg">{project.title}</CardTitle>
-                <Badge
-                  variant="outline"
-                  className={`text-xs bg-gradient-to-r ${project.color} text-white border-0`}
-                >
-                  {project.type}
-                </Badge>
-              </div>
-              <CardDescription className="text-slate-300 text-sm">
-                {project.description}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-4 pt-0">
-              <div className="flex flex-wrap gap-2">
-                {project.technologies.map((tech) => (
-                  <Badge
-                    key={tech}
-                    variant="outline"
-                    className="bg-slate-700/50 text-slate-200 border-slate-600 text-xs"
-                  >
-                    {tech}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      ))}
-    </div>
-  </div>
 
-  <div className="flex justify-center mt-6" ref={paginationRef}>
-  {projects.map((_, idx) => (
-    <button
-      key={idx}
-      onClick={() => instanceRef.current?.moveToIdx(idx)}
-     className={`w-3 h-3 mx-1 rounded-full transition-all duration-300 ${
-    currentSlide === idx ? "bg-cyan-500 scale-110" : "bg-slate-600"
-  }`}
-    />
-  ))}
-</div>
+            <div className="space-y-5">
+              <p className="max-w-xl text-sm uppercase tracking-[0.3em] text-stone-500">Lagos based. Remote ready.</p>
+              <h1 className="w-full font-[family-name:var(--font-display)] text-[3.7rem] leading-[0.94] text-stone-950 sm:text-[4.75rem] lg:text-[5.15rem]  xl:text-[5.6rem]">
+                Building digital products that feel composed, fast, and easy to use.
+              </h1>
+              <p className="max-w-2xl text-base leading-8 text-stone-600 sm:text-lg lg:text-xl">
+                I design and build frontend interfaces for the web and Flutter experiences for mobile teams, with a
+                focus on responsive systems, clean interaction design, and production-ready implementation.
+              </p>
+            </div>
 
-</section>
-
-
-      {/* Experience Section */}
-      <section id="experience" className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-purple-500">
-              Work Experience
-            </h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-violet-500 to-purple-500 mx-auto"></div>
-          </motion.div>
-
-          <div className="max-w-4xl mx-auto">
-            {experience.map((job, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative"
+            <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+              <Button
+                onClick={() => scrollToSection("work")}
+                className="rounded-full bg-stone-950 px-6 text-stone-50 hover:bg-stone-800"
               >
-                {index !== experience.length - 1 && (
-                  <div className="absolute left-4 top-12 w-0.5 h-full bg-slate-700"></div>
-                )}
-                <div className="flex items-start mb-12">
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${job.color}`}>
-                    <Briefcase size={16} className="text-white" />
-                  </div>
-                  <div className="ml-6">
-                    <h3 className="text-xl font-semibold text-white">{job.title}</h3>
-                    <p className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 font-medium">
-                      {job.company}
-                    </p>
-                    <p className="text-slate-400 text-sm flex items-center mb-2">
-                      <Calendar className="mr-1" size={14} />
-                      {job.period} • {job.location}
-                    </p>
-                    <p className="text-slate-300 mb-3">{job.description}</p>
-                    <ul className="list-none text-slate-300 text-sm space-y-1">
-                      {job.achievements.map((achievement, i) => (
-                        <motion.li
-                          key={i}
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.3, delay: 0.1 * i + 0.3 }}
-                          className="flex items-start"
-                        >
-                          <Star size={14} className="text-amber-500 mr-2 mt-1 flex-shrink-0" />
-                          {achievement}
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                View selected work
+                <ArrowRight />
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleDownloadCV}
+                className="rounded-full border-stone-300 bg-white/60 px-6 text-stone-900 hover:bg-white"
+              >
+                <Download />
+                Download CV
+              </Button>
+              <Button
+                variant="outline"
+                asChild
+                className="rounded-full border-stone-300 bg-transparent px-6 text-stone-900 hover:bg-white/70"
+              >
+                <a href="/cv/Oluwadamisi_Damilola_CV.pdf" target="_blank" rel="noreferrer">
+                  <FileText />
+                  Open CV
+                </a>
+              </Button>
+            </div>
 
-          {/* Education Section */}
-          <div className="mt-16">
-            <motion.h3
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="text-2xl font-bold text-white mb-8 text-center"
-            >
-              Education
-            </motion.h3>
-            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {education.map((edu, index) => (
+            <div className="grid gap-4 sm:grid-cols-3">
+              {metrics.map((metric, index) => (
                 <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -5 }}
+                  key={metric.label}
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.55, delay: 0.15 + index * 0.08 }}
+                  className="glass-panel rounded-[26px] p-5"
                 >
-                  <Card className="bg-slate-800/50 border-slate-700 overflow-hidden">
-                    <div className={`h-2 bg-gradient-to-r ${edu.color}`}></div>
-                    <CardHeader>
-                      <CardTitle className="text-lg text-white">{edu.degree}</CardTitle>
-                      <CardDescription className="text-slate-300">
-                        {edu.institution} • {edu.location}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-slate-400 text-sm flex items-center">
-                        <Calendar className="mr-1" size={14} />
-                        {edu.period}
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <div className="text-2xl font-semibold text-stone-950">{metric.value}</div>
+                  <div className="mt-1 text-sm uppercase tracking-[0.18em] text-stone-500">{metric.label}</div>
                 </motion.div>
               ))}
             </div>
+
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              {socialLinks.map((link) => {
+                const Icon = link.icon
+
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target={link.href.startsWith("http") ? "_blank" : undefined}
+                    rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                    className="inline-flex items-center gap-2 text-sm text-stone-600 transition hover:text-stone-950"
+                  >
+                    <Icon className="h-4 w-4" />
+                    {link.label}
+                  </a>
+                )
+              })}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: reduceMotion ? 0 : 28 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="relative mx-auto w-full max-w-4xl xl:max-w-none"
+          >
+            <div className="grid gap-4 md:grid-cols-[0.92fr_1.08fr] xl:grid-cols-[1.2fr_0.8fr]">
+              <div className="glass-panel overflow-hidden rounded-[30px] p-3 sm:rounded-[34px]">
+                <div className="relative overflow-hidden rounded-[28px]">
+                  <div className="absolute left-3 top-3 z-10 rounded-full bg-[rgba(34,26,21,0.78)] px-3 py-2 text-[11px] uppercase tracking-[0.16em] text-stone-100 sm:left-4 sm:top-4 sm:px-4 sm:text-xs sm:tracking-[0.2em]">
+                    Available for freelance and product teams
+                  </div>
+                  <div className="relative aspect-[4/4.8] sm:aspect-[4/5]">
+                    <Image
+                      src="/aboutme.jpg"
+                      alt="Oluwadamisi Damilola portrait"
+                      fill
+                      priority
+                      className="object-cover"
+                      sizes="(min-width: 1280px) 34vw, (min-width: 768px) 48vw, 90vw"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <Card className="glass-panel rounded-[26px] border-0 sm:rounded-[30px]">
+                  <CardHeader className="pb-3 p-5 sm:p-6 sm:pb-3">
+                    <CardTitle className="flex items-center gap-3 text-lg text-stone-950 sm:text-xl">
+                      <Monitor className="h-5 w-5 text-[#c6633f]" />
+                      Frontend systems
+                    </CardTitle>
+                    <CardDescription className="text-sm leading-6 text-stone-600">
+                      React interfaces with responsive layouts, reusable components, and cleaner handoff to product teams.
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+
+                <Card className="glass-panel rounded-[26px] border-0 sm:rounded-[30px]">
+                  <CardHeader className="pb-3 p-5 sm:p-6 sm:pb-3">
+                    <CardTitle className="flex items-center gap-3 text-lg text-stone-950 sm:text-xl">
+                      <Smartphone className="h-5 w-5 text-[#295f86]" />
+                      Mobile delivery
+                    </CardTitle>
+                    <CardDescription className="text-sm leading-6 text-stone-600">
+                      Flutter builds for finance, healthcare logistics, commerce, and productivity products.
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+
+                <motion.div
+                  animate={
+                    reduceMotion
+                      ? undefined
+                      : {
+                          y: [0, -10, 0],
+                        }
+                  }
+                  transition={
+                    reduceMotion
+                      ? undefined
+                      : {
+                          duration: 5,
+                          repeat: Number.POSITIVE_INFINITY,
+                          ease: "easeInOut",
+                        }
+                  }
+                  className="glass-panel rounded-[26px] p-5 sm:rounded-[30px] sm:p-6"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="rounded-2xl bg-stone-950 p-3 text-stone-50">
+                      <MapPin className="h-5 w-5" />
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-xs uppercase tracking-[0.2em] text-stone-500">Current base</p>
+                      <p className="text-lg font-semibold text-stone-950">Lagos, Nigeria</p>
+                      <p className="text-sm leading-6 text-stone-600">
+                        Working across web and mobile products with a design-aware approach to implementation.
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+          onClick={() => scrollToSection("about")}
+          className="mx-auto mt-12 flex items-center gap-2 text-sm uppercase tracking-[0.2em] text-stone-500 transition hover:text-stone-950"
+        >
+          Scroll for more
+          <motion.span
+            animate={reduceMotion ? undefined : { y: [0, 6, 0] }}
+            transition={reduceMotion ? undefined : { duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
+          >
+            <ChevronDown className="h-5 w-5" />
+          </motion.span>
+        </motion.button>
+      </section>
+
+      <section id="about" className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.92fr_1.08fr]">
+          <SectionHeading
+            eyebrow="About"
+            title="A portfolio should read like a product story, not a stack of screenshots."
+            description="I work across design-aware frontend and mobile delivery, focusing on interfaces that feel calm, usable, and ready for actual users. That means better hierarchy, cleaner component structure, and enough engineering discipline to make future changes easier."
+          />
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Card className="glass-panel rounded-[30px] border-0 sm:col-span-2">
+              <CardHeader>
+                <CardTitle className="text-2xl text-stone-950">What I bring to teams</CardTitle>
+              </CardHeader>
+              <CardContent className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-3 rounded-[24px] bg-white/60 p-5">
+                  <div className="flex items-center gap-3 text-stone-950">
+                    <Code className="h-5 w-5 text-[#c6633f]" />
+                    <span className="font-medium">Implementation with taste</span>
+                  </div>
+                  <p className="text-sm leading-6 text-stone-600">
+                    Clean layout systems, restrained animation, and clearer interaction states instead of generic UI.
+                  </p>
+                </div>
+                <div className="space-y-3 rounded-[24px] bg-white/60 p-5">
+                  <div className="flex items-center gap-3 text-stone-950">
+                    <Briefcase className="h-5 w-5 text-[#295f86]" />
+                    <span className="font-medium">Product-minded thinking</span>
+                  </div>
+                  <p className="text-sm leading-6 text-stone-600">
+                    Interfaces are shaped around the user task first, not just technical delivery.
+                  </p>
+                </div>
+                <div className="space-y-3 rounded-[24px] bg-white/60 p-5">
+                  <div className="flex items-center gap-3 text-stone-950">
+                    <CheckCircle className="h-5 w-5 text-[#5f8d53]" />
+                    <span className="font-medium">Reliable collaboration</span>
+                  </div>
+                  <p className="text-sm leading-6 text-stone-600">
+                    Comfortable with handoff reviews, feedback loops, debugging, and keeping features production-ready.
+                  </p>
+                </div>
+                <div className="space-y-3 rounded-[24px] bg-white/60 p-5">
+                  <div className="flex items-center gap-3 text-stone-950">
+                    <Mail className="h-5 w-5 text-[#7a6a2f]" />
+                    <span className="font-medium">Clear communication</span>
+                  </div>
+                  <p className="text-sm leading-6 text-stone-600">
+                    Direct updates, strong implementation details, and fewer surprises during delivery.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="glass-panel rounded-[30px] border-0 sm:col-span-2">
+              <CardHeader>
+                <CardTitle className="text-2xl text-stone-950">Working principles</CardTitle>
+                <CardDescription className="text-stone-600">
+                  The standards I keep when shipping interfaces and mobile flows.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-3">
+                {principles.map((principle) => (
+                  <div key={principle} className="flex items-start gap-3 rounded-[22px] bg-white/60 p-4">
+                    <span className="mt-1 h-2.5 w-2.5 rounded-full bg-stone-950" />
+                    <p className="text-sm leading-6 text-stone-700">{principle}</p>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <section id="capabilities" className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-7xl space-y-10">
+          <SectionHeading
+            eyebrow="Capabilities"
+            title="The strongest work sits where interface craft and implementation discipline meet."
+            description="I work across responsive web interfaces, cross-platform mobile apps, and the toolchain needed to keep product teams moving."
+          />
+
+          <div className="grid gap-6 lg:grid-cols-3">
+            <Card className="glass-panel rounded-[30px] border-0">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-2xl text-stone-950">
+                  <Monitor className="h-5 w-5 text-[#c6633f]" />
+                  Frontend engineering
+                </CardTitle>
+                <CardDescription className="text-stone-600">
+                  React-first interface work for dashboards, landing pages, and product surfaces.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-wrap gap-2">
+                {frontendSkills.map((skill) => (
+                  <Badge
+                    key={skill}
+                    variant="outline"
+                    className="rounded-full border-stone-300 bg-white/70 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-stone-700"
+                  >
+                    {skill}
+                  </Badge>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="glass-panel rounded-[30px] border-0">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-2xl text-stone-950">
+                  <Smartphone className="h-5 w-5 text-[#295f86]" />
+                  Mobile product delivery
+                </CardTitle>
+                <CardDescription className="text-stone-600">
+                  Flutter apps tuned for clarity, performance, and consistent behavior across devices.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-wrap gap-2">
+                {mobileSkills.map((skill) => (
+                  <Badge
+                    key={skill}
+                    variant="outline"
+                    className="rounded-full border-stone-300 bg-white/70 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-stone-700"
+                  >
+                    {skill}
+                  </Badge>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="glass-panel rounded-[30px] border-0">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-2xl text-stone-950">
+                  <Sparkles className="h-5 w-5 text-[#5f8d53]" />
+                  Tools and workflow
+                </CardTitle>
+                <CardDescription className="text-stone-600">
+                  The supporting stack for collaboration, backend integration, and delivery quality.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-wrap gap-2">
+                {toolSkills.map((skill) => (
+                  <Badge
+                    key={skill}
+                    variant="outline"
+                    className="rounded-full border-stone-300 bg-white/70 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-stone-700"
+                  >
+                    {skill}
+                  </Badge>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <section id="work" className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-7xl space-y-10">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <SectionHeading
+              eyebrow="Selected Work"
+              title="Projects across fashion, fintech, logistics, education, and productivity."
+              description="The work spans customer-facing websites, admin dashboards, and mobile products. The common thread is cleaner UX backed by stable implementation."
+            />
+            <div className="max-w-sm rounded-[28px] border border-stone-800/10 bg-white/60 p-5 text-sm leading-6 text-stone-600">
+              I focus on products that need better structure, stronger storytelling, and fewer rough edges across devices.
+            </div>
           </div>
 
-          {/* Courses Section */}
-          <div className="mt-12">
-            <motion.h3
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="text-2xl font-bold text-white mb-8 text-center"
-            >
-              Training & Courses
-            </motion.h3>
-            <div className="max-w-2xl mx-auto">
-              <ul className="space-y-3">
-                {courses.map((course, index) => (
-                  <motion.li
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="flex items-center text-slate-300 bg-slate-800/30 p-3 rounded-lg border-l-4 hover:bg-slate-800/50 transition-colors"
-                    style={{ borderLeftColor: `rgb(${index * 50}, 100, 255)` }}
-                  >
-                    <Award className={`mr-3 ${course.color}`} size={16} />
-                    {course.name}
-                  </motion.li>
-                ))}
-              </ul>
+          <FeaturedProjectCard project={leadProject} />
+
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {supportingProjects.map((project, index) => (
+              <ProjectCard key={project.title} project={project} index={index + 1} />
+            ))}
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-2">
+            {moreProjects.map((project, index) => (
+              <CompactProjectCard key={project.title} project={project} index={index} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="experience" className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-7xl space-y-10">
+          <SectionHeading
+            eyebrow="Experience"
+            title="A growing track record across agency, internship, and freelance product work."
+            description="My path covers React delivery, Flutter builds, and the practical realities of working inside teams, client reviews, and shipping cycles."
+          />
+
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+            <div className="space-y-6">
+              {experience.map((item, index) => (
+                <motion.div
+                  key={`${item.company}-${item.period}`}
+                  initial={{ opacity: 0, x: -24 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  className="glass-panel rounded-[30px] p-6"
+                >
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="space-y-2">
+                      <h3 className="text-2xl font-semibold text-stone-950">{item.title}</h3>
+                      <p className="text-base text-stone-700">
+                        {item.company} <span className="text-stone-400">•</span> {item.location}
+                      </p>
+                    </div>
+                    <div className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-xs uppercase tracking-[0.18em] text-stone-600">
+                      <Calendar className="h-4 w-4" />
+                      {item.period}
+                    </div>
+                  </div>
+                  <p className="mt-4 text-sm leading-7 text-stone-600">{item.description}</p>
+                  <div className="mt-5 grid gap-3">
+                    {item.achievements.map((achievement) => (
+                      <div key={achievement} className="flex items-start gap-3 rounded-[22px] bg-white/60 p-4">
+                        <CheckCircle className="mt-0.5 h-4 w-4 text-[#5f8d53]" />
+                        <p className="text-sm leading-6 text-stone-700">{achievement}</p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="space-y-6">
+              <Card className="glass-panel rounded-[30px] border-0">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-stone-950">Education</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {education.map((item) => (
+                    <div key={`${item.school}-${item.period}`} className="rounded-[22px] bg-white/60 p-5">
+                      <p className="text-sm uppercase tracking-[0.16em] text-stone-500">{item.period}</p>
+                      <h3 className="mt-2 text-lg font-semibold text-stone-950">{item.title}</h3>
+                      <p className="mt-1 text-sm leading-6 text-stone-600">
+                        {item.school} • {item.location}
+                      </p>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              <Card className="glass-panel rounded-[30px] border-0">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3 text-2xl text-stone-950">
+                    <Award className="h-5 w-5 text-[#c6633f]" />
+                    Training
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {training.map((item) => (
+                    <div key={item} className="rounded-[22px] bg-white/60 p-4 text-sm leading-6 text-stone-700">
+                      {item}
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-900">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500">
-              Get In Touch
-            </h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 mx-auto mb-6"></div>
-            <p className="text-slate-300 max-w-2xl mx-auto">
-              I'm always interested in new opportunities and exciting projects. Let's discuss how we can work together!
-            </p>
-          </motion.div>
+      <section id="contact" className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.86fr_1.14fr]">
+          <div className="space-y-6">
+            <SectionHeading
+              eyebrow="Contact"
+              title="If the product needs a sharper interface, let’s talk."
+              description="I’m open to frontend roles, Flutter work, freelance builds, and product collaborations that need clean execution and thoughtful UI."
+            />
 
-          <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <h3 className="text-2xl font-semibold text-white mb-6">Contact Information</h3>
-              <div className="space-y-4">
-                <motion.div whileHover={{ x: 5 }} className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center mr-4">
-                    <Mail className="text-pink-500" size={20} />
+            <Card className="glass-panel rounded-[30px] border-0">
+              <CardContent className="space-y-5 p-6">
+                <div className="flex items-start gap-4">
+                  <div className="rounded-2xl bg-stone-950 p-3 text-stone-50">
+                    <Mail className="h-5 w-5" />
                   </div>
-                  <span className="text-slate-300">damilolaoluwadamisi@gmail.com</span>
-                </motion.div>
-                <motion.div whileHover={{ x: 5 }} className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mr-4">
-                    <MapPin className="text-purple-500" size={20} />
-                  </div>
-                  <span className="text-slate-300">Lagos, Nigeria</span>
-                </motion.div>
-                <motion.div whileHover={{ x: 5 }} className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center mr-4">
-                    <Code className="text-cyan-500" size={20} />
-                  </div>
-                  <span className="text-slate-300">Available for Remote Work</span>
-                </motion.div>
-              </div>
-
-              <Separator className="my-6 bg-slate-700" />
-
-              <div className="flex space-x-4">
-                <motion.div whileHover={{ scale: 1.1 }}>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    asChild
-                    className="bg-slate-800/50 border-pink-500/50 text-pink-500 hover:bg-pink-500/10"
-                  >
-                    <a href="https://github.com/Ade1fe" target="_blank" rel="noopener noreferrer">
-                      <Github className="mr-2" size={16} />
-                      GitHub
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.18em] text-stone-500">Email</p>
+                    <a href="mailto:addypearl09@gmail.com" className="mt-1 block text-lg text-stone-950 hover:underline">
+                      addypearl09@gmail.com
                     </a>
-                  </Button>
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.1 }}>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    asChild
-                    className="bg-slate-800/50 border-cyan-500/50 text-cyan-500 hover:bg-cyan-500/10"
-                  >
-                    <a href="https://www.linkedin.com/in/damilola-adeife-oluwadamisi-699325235/?trk=contact-info" target="_blank" rel="noopener noreferrer">
-                      <Linkedin className="mr-2" size={16} />
-                      LinkedIn
-                    </a>
-                  </Button>
-                </motion.div>
-              </div>
-            </motion.div>
+                  </div>
+                </div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <Card className="bg-slate-800/50 border-slate-700">
-                <CardHeader>
-                  <CardTitle className="text-white">Send a Message</CardTitle>
-                  <CardDescription className="text-slate-400">
-                    Fill out the form below and I'll get back to you as soon as possible.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-1">Name *</label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-white placeholder-slate-400"
-                        placeholder="Your full name"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-1">Email *</label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-white placeholder-slate-400"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-1">Message *</label>
-                      <textarea
-                        name="message"
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        required
-                        rows={4}
-                        className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-white placeholder-slate-400"
-                        placeholder="Tell me about your project or just say hello..."
-                      />
-                    </div>
+                <div className="flex items-start gap-4">
+                  <div className="rounded-2xl bg-stone-950 p-3 text-stone-50">
+                    <MapPin className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.18em] text-stone-500">Location</p>
+                    <p className="mt-1 text-lg text-stone-950">Lagos, Nigeria</p>
+                  </div>
+                </div>
 
-                    {submitStatus.type && (
-                      <div
-                        className={`p-3 rounded-md text-sm flex items-center ${
-                          submitStatus.type === "error"
-                            ? "bg-red-500/10 text-red-400 border border-red-500/20"
-                            : "bg-green-500/10 text-green-400 border border-green-500/20"
-                        }`}
+                <div className="rounded-[24px] bg-white/60 p-5">
+                  <p className="text-xs uppercase tracking-[0.2em] text-stone-500">Best fit</p>
+                  <p className="mt-2 text-sm leading-7 text-stone-700">
+                    Product teams that care about polish, performance, and shipping interfaces that users can understand quickly.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  {socialLinks.map((link) => {
+                    const Icon = link.icon
+
+                    return (
+                      <Button
+                        key={link.label}
+                        asChild
+                        variant="outline"
+                        className="rounded-full border-stone-300 bg-white/70 text-stone-900 hover:bg-white"
                       >
-                        {submitStatus.type === "error" ? (
-                          <AlertCircle className="mr-2" size={16} />
-                        ) : (
-                          <CheckCircle className="mr-2" size={16} />
-                        )}
-                        {submitStatus.message}
-                      </div>
-                    )}
-
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting || !formData.name || !formData.email || !formData.message}
-                      className="w-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-600 hover:via-purple-600 hover:to-cyan-600 text-white border-0 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="mr-2" size={16} />
-                          Send Message
-                        </>
-                      )}
-                    </Button>
-                  </form>
-
-                  <div className="mt-4 text-xs text-slate-400 text-center">
-                    Your message will be sent directly to damilolaoluwadamisi@gmail.com
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
+                        <a
+                          href={link.href}
+                          target={link.href.startsWith("http") ? "_blank" : undefined}
+                          rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                        >
+                          <Icon />
+                          {link.label}
+                        </a>
+                      </Button>
+                    )
+                  })}
+                </div>
+              </CardContent>
+            </Card>
           </div>
+
+          <Card className="glass-panel rounded-[34px] border-0">
+            <CardHeader className="space-y-3">
+              <CardTitle className="text-3xl text-stone-950">Start a conversation</CardTitle>
+              <CardDescription className="max-w-xl text-base leading-7 text-stone-600">
+                Share the product, the role, or the feature set you need help with. I’ll respond with a clear next step.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid gap-5 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <label htmlFor="name" className="text-sm font-medium text-stone-700">
+                      Name
+                    </label>
+                    <Input
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Your name"
+                      className="h-12 rounded-2xl border-stone-300 bg-white/80 text-stone-950 placeholder:text-stone-400 focus-visible:ring-stone-900"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="email" className="text-sm font-medium text-stone-700">
+                      Email
+                    </label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="you@example.com"
+                      className="h-12 rounded-2xl border-stone-300 bg-white/80 text-stone-950 placeholder:text-stone-400 focus-visible:ring-stone-900"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="message" className="text-sm font-medium text-stone-700">
+                    Project details
+                  </label>
+                  <Textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    placeholder="Tell me what you're building and what kind of help you need."
+                    className="min-h-[180px] rounded-[24px] border-stone-300 bg-white/80 text-stone-950 placeholder:text-stone-400 focus-visible:ring-stone-900"
+                  />
+                </div>
+
+                {submitState.message ? (
+                  <div
+                    className={`flex items-start gap-3 rounded-[22px] border px-4 py-4 text-sm leading-6 ${
+                      submitState.type === "success"
+                        ? "border-emerald-200 bg-emerald-50 text-emerald-900"
+                        : "border-rose-200 bg-rose-50 text-rose-900"
+                    }`}
+                  >
+                    {submitState.type === "success" ? (
+                      <CheckCircle className="mt-0.5 h-4 w-4 flex-none" />
+                    ) : (
+                      <AlertCircle className="mt-0.5 h-4 w-4 flex-none" />
+                    )}
+                    <span>{submitState.message}</span>
+                  </div>
+                ) : null}
+
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-sm leading-6 text-stone-500">
+                    Prefer email? You can also reach me directly at{" "}
+                    <a href="mailto:addypearl09@gmail.com" className="text-stone-950 underline">
+                      addypearl09@gmail.com
+                    </a>
+                    .
+                  </p>
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="rounded-full bg-stone-950 px-6 text-stone-50 hover:bg-stone-800"
+                  >
+                    <Send />
+                    {isSubmitting ? "Sending..." : "Send message"}
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-slate-900 text-white py-8 px-4 sm:px-6 lg:px-8 border-t border-slate-800">
-        <div className="max-w-7xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <p>&copy; 2024 Oluwadamisi Damilola. All rights reserved.</p>
-            <p className="text-slate-400 mt-2">
-              Built with{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500">
-                React, TypeScript, and Next.js
-              </span>
-            </p>
-          </motion.div>
+      <footer className="px-4 pt-10 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 border-t border-stone-800/10 py-8 text-sm text-stone-500 sm:flex-row sm:items-center sm:justify-between">
+          <p>Designed and built for a sharper first impression.</p>
+          <p>Oluwadamisi Damilola • Frontend and Mobile App Developer</p>
         </div>
       </footer>
-    </div>
+    </main>
   )
 }
