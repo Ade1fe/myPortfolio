@@ -75,6 +75,34 @@ const navigation: Array<{ id: SectionId; label: string }> = [
 
 const projects: Project[] = [
   {
+  title: "School Super Admin Platform",
+  type: "Education Management System",
+  summary:
+    "A centralized super admin system for managing schools, students, and staff with structured control over academic operations and user data.",
+  focus:
+    "Role-based admin dashboard for managing users, school records, classes, and system-wide configurations.",
+  technologies: ["React", "Next.js", "Chakra UI", "Firebase", "Firestore"],
+  image: "/super-admin.png",
+  github: "https://github.com/Ade1fe?tab=repositories",
+  accent: "#0f766e",
+  gradient:
+    "linear-gradient(135deg, rgba(15, 118, 110, 0.16), rgba(255, 255, 255, 0.82))",
+},
+  {
+  title: "Araya Web Doctor",
+  type: "Healthcare Platform",
+  summary:
+    "A doctor-patient platform designed to simplify appointment booking, consultations, and healthcare access through a clean web experience.",
+  focus:
+    "Role-based system for patients and doctors with scheduling, profile management, and appointment workflows.",
+  technologies: ["React", "Next.js", "Chakra UI", "Firebase", "Firestore"],
+  image: "/araya-web.png",
+  github: "https://github.com/Ade1fe?tab=repositories",
+  accent: "#3b82f6",
+  gradient:
+    "linear-gradient(135deg, rgba(59, 130, 246, 0.16), rgba(255, 255, 255, 0.82))",
+},
+  {
     title: "Jma Couture",
     type: "Fashion Commerce",
     summary:
@@ -194,9 +222,9 @@ const projects: Project[] = [
   },
 ]
 
-const leadProject = projects[0]
-const supportingProjects = projects.slice(1, 4)
-const moreProjects = projects.slice(4)
+// const leadProject = projects[0]
+// const supportingProjects = projects.slice(1, 4)
+// const moreProjects = projects.slice(4)
 
 const frontendSkills = [
   "React.js",
@@ -232,55 +260,72 @@ const principles = [
 
 const experience = [
   {
-    title: "Frontend Developer",
-    company: "Pivelar",
-    location: "Ikeja, Lagos",
-    period: "September 2023 - February 2024",
-    description:
-      "Built modular React features with Chakra UI, improving interface responsiveness and making the frontend easier to scale and demo to clients.",
-    achievements: [
-      "Improved load times and interface responsiveness",
-      "Built reusable UI patterns for faster feature delivery",
-      "Supported design handoff reviews and client demonstrations",
-      "Contributed through code review and team collaboration",
-    ],
-  },
-  {
-    title: "Flutter Developer",
-    company: "Freelance Projects",
+    title: "Mobile & Web Developer",
+    company: "Alterdoss",
     location: "Remote",
-    period: "January 2023 - Present",
+    period: "2024 - Present",
     description:
-      "Delivered cross-platform mobile builds for commerce, productivity, and operations workflows with Firebase-backed features and polished UI.",
+      "Working across mobile and web applications, building scalable interfaces and shipping production-ready features using React, Next.js, and Flutter.",
     achievements: [
-      "Developed responsive layouts across a range of mobile sizes",
-      "Integrated Firebase Auth and Firestore services",
-      "Shipped smoother interactions and animations after debugging bottlenecks",
-      "Published production-ready Android builds",
+      "Built and maintained cross-platform mobile and web applications",
+      "Developed reusable UI systems for faster product delivery",
+      "Integrated APIs and optimized frontend performance",
+      "Collaborated closely with product and design teams",
     ],
   },
+
+  {
+    title: "Frontend & Flutter Developer",
+    company: "Finosell",
+    location: "Lagos, Nigeria",
+    period: "2023 - 2024",
+    description:
+      "Worked on fintech-focused products, building responsive web interfaces and mobile features across React, Next.js, and Flutter.",
+    achievements: [
+      "Developed responsive fintech dashboards and UI flows",
+      "Built Flutter mobile features for customer-facing products",
+      "Improved UI consistency across web and mobile platforms",
+      "Worked with APIs for transaction and user data handling",
+    ],
+  },
+
+  {
+    title: "Mobile Developer Intern",
+    company: "Browpay",
+    location: "Remote",
+    period: "2023",
+    description:
+      "Interned as a mobile developer focused on learning and building Flutter-based applications for fintech workflows and user transactions.",
+    achievements: [
+      "Learned Flutter mobile development fundamentals",
+      "Built simple UI components and mobile screens",
+      "Worked with basic API integration and Firebase services",
+      "Collaborated with senior developers on mobile features",
+    ],
+  },
+
   {
     title: "Frontend Developer Intern",
-    company: "InBrandPr",
-    location: "Ogba, Lagos",
-    period: "March 2022 - December 2022",
+    company: "Pivelar",
+    location: "Ikeja, Lagos",
+    period: "2022 - 2023",
     description:
-      "Translated Figma work into production React interfaces, dashboards, and landing pages with responsive behavior and real-time data support.",
+      "Translated designs into responsive web interfaces and contributed to product development using React and Next.js.",
     achievements: [
-      "Built dashboard components with live Firebase data",
-      "Turned design files into responsive UI with closer visual fidelity",
-      "Worked inside agile routines with standups and sprint delivery",
-      "Supported production deployment workflows",
+      "Built reusable React components and landing pages",
+      "Improved UI responsiveness and layout consistency",
+      "Collaborated with designers on Figma-to-code delivery",
+      "Participated in code reviews and sprint cycles",
     ],
   },
-]
+];
 
 const education = [
   {
     title: "Ordinary National Diploma (OND)",
     school: "Speedway Polytechnic",
     location: "Ojodu Berger",
-    period: "April 2022 - Present",
+    period: "April 2022 - Febuary 2025",
   },
   {
     title: "Diploma in Core Java & Web Development",
@@ -721,7 +766,7 @@ export default function Portfolio() {
       </div>
 
       <nav className="sticky top-3 z-50 px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto max-w-[1540px]">
           <div className="glass-panel flex items-center justify-between rounded-[24px] px-3 py-3 sm:rounded-[30px] sm:px-4">
             <button
               onClick={() => scrollToSection("home")}
@@ -839,7 +884,7 @@ export default function Portfolio() {
       </nav>
 
       <section id="home" className="scroll-mt-28 px-4 pb-16 pt-12 sm:px-6 lg:px-8 lg:pb-24 lg:pt-16">
-        <div className="mx-auto grid max-w-7xl items-start gap-10 xl:grid-cols-[1.02fr_0.98fr] xl:items-center xl:gap-12">
+        <div className="mx-auto grid max-w-[1540px] items-start gap-10 xl:grid-cols-[1.02fr_0.98fr] xl:items-center xl:gap-12">
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
@@ -931,84 +976,142 @@ export default function Portfolio() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="relative mx-auto w-full max-w-4xl xl:max-w-none"
           >
-            <div className="grid gap-4 md:grid-cols-[0.92fr_1.08fr] xl:grid-cols-[1.2fr_0.8fr]">
-              <div className="glass-panel overflow-hidden rounded-[30px] p-3 sm:rounded-[34px]">
-                <div className="relative overflow-hidden rounded-[28px]">
-                  <div className="absolute left-3 top-3 z-10 rounded-full bg-[rgba(34,26,21,0.78)] px-3 py-2 text-[11px] uppercase tracking-[0.16em] text-stone-100 sm:left-4 sm:top-4 sm:px-4 sm:text-xs sm:tracking-[0.2em]">
-                    Available for freelance and product teams
-                  </div>
-                  <div className="relative aspect-[4/4.8] sm:aspect-[4/5]">
-                    <Image
-                      src="/aboutme.jpg"
-                      alt="Oluwadamisi Damilola portrait"
-                      fill
-                      priority
-                      className="object-cover"
-                      sizes="(min-width: 1280px) 34vw, (min-width: 768px) 48vw, 90vw"
-                    />
-                  </div>
-                </div>
-              </div>
+        <div className="flex flex-col xl:flex-row gap-6 items-stretch">
+  {/* Left - Portrait */}
+  <div className="w-full xl:w-[42%]">
+    <div className="glass-panel h-full overflow-hidden rounded-[32px] p-3 shadow-2xl">
+      <div className="relative h-full min-h-[650px] overflow-hidden rounded-[28px] group">
+        {/* Decorative background */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#c6633f]/20 via-transparent to-[#295f86]/20" />
 
-              <div className="flex flex-col gap-4">
-                <Card className="glass-panel rounded-[26px] border-0 sm:rounded-[30px]">
-                  <CardHeader className="pb-3 p-5 sm:p-6 sm:pb-3">
-                    <CardTitle className="flex items-center gap-3 text-lg text-stone-950 sm:text-xl">
-                      <Monitor className="h-5 w-5 text-[#c6633f]" />
-                      Frontend systems
-                    </CardTitle>
-                    <CardDescription className="text-sm leading-6 text-stone-600">
-                      React interfaces with responsive layouts, reusable components, and cleaner handoff to product teams.
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
+        {/* Floating badge */}
+        <div className="absolute left-5 top-5 z-20 rounded-full border border-white/20 bg-black/45 px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-white backdrop-blur-xl">
+          ✦ Available for freelance
+        </div>
 
-                <Card className="glass-panel rounded-[26px] border-0 sm:rounded-[30px]">
-                  <CardHeader className="pb-3 p-5 sm:p-6 sm:pb-3">
-                    <CardTitle className="flex items-center gap-3 text-lg text-stone-950 sm:text-xl">
-                      <Smartphone className="h-5 w-5 text-[#295f86]" />
-                      Mobile delivery
-                    </CardTitle>
-                    <CardDescription className="text-sm leading-6 text-stone-600">
-                      Flutter builds for finance, healthcare logistics, commerce, and productivity products.
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
+        {/* Image */}
+        <Image
+          src="/aboutme.jpg"
+          alt="Oluwadamisi Damilola portrait"
+          fill
+          priority
+          sizes="(min-width:1280px) 40vw, (min-width:768px) 50vw, 100vw"
+          className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+        />
 
-                <motion.div
-                  animate={
-                    reduceMotion
-                      ? undefined
-                      : {
-                          y: [0, -10, 0],
-                        }
-                  }
-                  transition={
-                    reduceMotion
-                      ? undefined
-                      : {
-                          duration: 5,
-                          repeat: Number.POSITIVE_INFINITY,
-                          ease: "easeInOut",
-                        }
-                  }
-                  className="glass-panel rounded-[26px] p-5 sm:rounded-[30px] sm:p-6"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="rounded-2xl bg-stone-950 p-3 text-stone-50">
-                      <MapPin className="h-5 w-5" />
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-xs uppercase tracking-[0.2em] text-stone-500">Current base</p>
-                      <p className="text-lg font-semibold text-stone-950">Lagos, Nigeria</p>
-                      <p className="text-sm leading-6 text-stone-600">
-                        Working across web and mobile products with a design-aware approach to implementation.
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
+        {/* Bottom overlay */}
+        <div className="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+        {/* Info Card */}
+        <div className="absolute bottom-6 left-6 z-20 rounded-2xl border border-white/20 bg-white/70 p-5 shadow-xl backdrop-blur-xl">
+          <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
+            Frontend Engineer
+          </p>
+
+          <h3 className="mt-1 text-2xl font-bold text-stone-900">
+            Oluwadamisi Damilola
+          </h3>
+
+          <p className="mt-2 text-sm text-stone-700">
+            React • Next.js • Flutter
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Right - Feature Cards */}
+  <div className="grid flex-1 gap-4 md:grid-cols-2">
+    <Card className="glass-panel rounded-[28px] border-0">
+      <CardHeader className="p-6">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#c6633f]/10">
+          <Monitor className="h-6 w-6 text-[#c6633f]" />
+        </div>
+
+        <CardTitle className="text-xl">
+          Frontend Systems
+        </CardTitle>
+
+        <CardDescription className="mt-2 text-sm leading-7 text-stone-600">
+          Building scalable React and Next.js applications with reusable
+          components, responsive layouts, and polished user experiences.
+        </CardDescription>
+      </CardHeader>
+    </Card>
+
+    <Card className="glass-panel rounded-[28px] border-0">
+      <CardHeader className="p-6">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#295f86]/10">
+          <Smartphone className="h-6 w-6 text-[#295f86]" />
+        </div>
+
+        <CardTitle className="text-xl">
+          Mobile Delivery
+        </CardTitle>
+
+        <CardDescription className="mt-2 text-sm leading-7 text-stone-600">
+          Cross-platform Flutter apps for fintech, healthcare, logistics,
+          e-commerce, and productivity products.
+        </CardDescription>
+      </CardHeader>
+    </Card>
+
+    <motion.div
+      animate={
+        reduceMotion
+          ? undefined
+          : {
+              y: [0, -8, 0],
+            }
+      }
+      transition={
+        reduceMotion
+          ? undefined
+          : {
+              duration: 5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }
+      }
+      className="glass-panel rounded-[28px] p-6"
+    >
+      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-stone-900 text-white">
+        <MapPin className="h-6 w-6" />
+      </div>
+
+      <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
+        Current Base
+      </p>
+
+      <h3 className="mt-2 text-2xl font-bold text-stone-900">
+        Lagos, Nigeria
+      </h3>
+
+      <p className="mt-3 text-sm leading-7 text-stone-600">
+        Collaborating with startups and businesses worldwide to build modern
+        web and mobile experiences with a strong design focus.
+      </p>
+    </motion.div>
+
+    <Card className="glass-panel rounded-[28px] border-0 bg-stone-950 text-white">
+      <CardHeader className="p-6">
+        <p className="text-sm uppercase tracking-[0.2em] text-stone-400">
+          Experience
+        </p>
+
+        <h2 className="mt-2 text-5xl font-bold">
+          5+
+        </h2>
+
+        <CardDescription className="mt-3 text-sm leading-7 text-stone-300">
+          Years creating high-performance products with React, Next.js,
+          TypeScript, and Flutter while collaborating closely with product
+          teams and designers.
+        </CardDescription>
+      </CardHeader>
+    </Card>
+  </div>
+</div>
           </motion.div>
         </div>
 
@@ -1030,7 +1133,7 @@ export default function Portfolio() {
       </section>
 
       <section id="about" className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.92fr_1.08fr]">
+        <div className="mx-auto grid max-w-[1540px] gap-10 lg:grid-cols-[0.92fr_1.08fr]">
           <SectionHeading
             eyebrow="About"
             title="A portfolio should read like a product story, not a stack of screenshots."
@@ -1103,7 +1206,7 @@ export default function Portfolio() {
       </section>
 
       <section id="capabilities" className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-        <div className="mx-auto max-w-7xl space-y-10">
+        <div className="mx-auto max-w-[1540px] space-y-10">
           <SectionHeading
             eyebrow="Capabilities"
             title="The strongest work sits where interface craft and implementation discipline meet."
@@ -1183,279 +1286,378 @@ export default function Portfolio() {
         </div>
       </section>
 
-      <section id="work" className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-        <div className="mx-auto max-w-7xl space-y-10">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <SectionHeading
-              eyebrow="Selected Work"
-              title="Projects across fashion, fintech, logistics, education, and productivity."
-              description="The work spans customer-facing websites, admin dashboards, and mobile products. The common thread is cleaner UX backed by stable implementation."
-            />
-            <div className="max-w-sm rounded-[28px] border border-stone-800/10 bg-white/60 p-5 text-sm leading-6 text-stone-600">
-              I focus on products that need better structure, stronger storytelling, and fewer rough edges across devices.
+    <section
+  id="work"
+  className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
+>
+  <div className="mx-auto max-w-[1540px] space-y-16">
+
+    {/* Header */}
+    <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <SectionHeading
+        eyebrow="Selected Work"
+        title="Projects across fashion, fintech, logistics, education, and productivity."
+        description="A collection of real product work focused on usability, structure, and clean execution."
+      />
+
+      <div className="max-w-sm rounded-[28px] border border-stone-800/10 bg-white/60 p-5 text-sm leading-6 text-stone-600">
+        I focus on building interfaces that feel intentional, fast, and easy to navigate across devices.
+      </div>
+    </div>
+
+    {/* Projects */}
+    <div className="space-y-20">
+
+      {projects.map((project, index) => {
+        const isReversed = index % 2 === 1
+
+        return (
+          <motion.div
+            key={project.title}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.6 }}
+            className={`grid items-center gap-10 lg:grid-cols-2 ${
+              isReversed ? "lg:grid-flow-dense" : ""
+            }`}
+          >
+            {/* IMAGE */}
+            <div className={isReversed ? "lg:col-start-2" : ""}>
+              <div className="relative aspect-[16/10] overflow-hidden rounded-[30px] glass-panel">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover transition-transform duration-700 hover:scale-[1.04]"
+                  sizes="(min-width: 1280px) 50vw, 100vw"
+                />
+
+                <div
+                  className="absolute bottom-4 right-4 h-12 w-12 rounded-full"
+                  style={{ background: project.gradient }}
+                />
+              </div>
             </div>
-          </div>
 
-          <FeaturedProjectCard project={leadProject} />
+            {/* CONTENT */}
+            <div className={`space-y-5 ${isReversed ? "lg:col-start-1" : ""}`}>
+              <div className="space-y-2">
+                <p className="text-xs uppercase tracking-[0.22em] text-stone-500">
+                  {project.type}
+                </p>
 
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {supportingProjects.map((project, index) => (
-              <ProjectCard key={project.title} project={project} index={index + 1} />
+                <h3 className="font-[family-name:var(--font-display)] text-3xl text-stone-950 sm:text-4xl">
+                  {project.title}
+                </h3>
+
+                <p className="text-sm leading-7 text-stone-600">
+                  {project.summary}
+                </p>
+              </div>
+
+              <p className="text-sm leading-7 text-stone-700">
+                {project.focus}
+              </p>
+
+              {/* Tech */}
+              <div className="flex flex-wrap gap-2">
+                {project.technologies.map((tech) => (
+                  <span
+                    key={tech}
+                    className="rounded-full border border-stone-300 bg-white/70 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-stone-700"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              {/* Links */}
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Button asChild className="rounded-full bg-stone-950 text-white hover:bg-stone-800">
+                  <a href={project.github} target="_blank">
+                    <Github />
+                    Code
+                  </a>
+                </Button>
+
+                {project.demo && (
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="rounded-full border-stone-300 bg-white/60 hover:bg-white"
+                  >
+                    <a href={project.demo} target="_blank">
+                      <ExternalLink />
+                      {project.demoLabel ?? "Live"}
+                    </a>
+                  </Button>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )
+      })}
+
+    </div>
+  </div>
+</section>
+
+<section
+  id="experience"
+  className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
+>
+  <div className="mx-auto max-w-[1540px] space-y-12">
+    <SectionHeading
+      eyebrow="Experience"
+      title="A growing track record across agency, internship, and freelance product work."
+      description="My path covers React delivery, Flutter builds, and real-world collaboration inside teams shipping production products."
+    />
+
+    <div className="grid gap-10 lg:grid-cols-[1.4fr_0.6fr]">
+      
+      {/* LEFT: Timeline style experience */}
+      <div className="relative space-y-10">
+        {/* vertical line */}
+        <div className="absolute left-4 top-0 h-full w-[1px] bg-stone-200" />
+
+        {experience.map((item, index) => (
+          <motion.div
+            key={`${item.company}-${item.period}`}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5, delay: index * 0.08 }}
+            className="relative pl-10"
+          >
+            {/* dot */}
+            <span className="absolute left-[10px] top-2 h-3 w-3 rounded-full bg-stone-950" />
+
+            <div className="glass-panel rounded-[28px] p-6">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h3 className="text-xl font-semibold text-stone-950">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-stone-600">
+                    {item.company} • {item.location}
+                  </p>
+                </div>
+
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-stone-600">
+                  <Calendar className="h-4 w-4" />
+                  {item.period}
+                </span>
+              </div>
+
+              <p className="mt-4 text-sm leading-7 text-stone-600">
+                {item.description}
+              </p>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {item.achievements.map((a) => (
+                  <span
+                    key={a}
+                    className="rounded-full bg-white/60 px-3 py-1 text-xs text-stone-700"
+                  >
+                    {a}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* RIGHT: Sticky summary */}
+      <div className="space-y-6 lg:sticky lg:top-24 h-fit">
+
+        <Card className="glass-panel rounded-[28px] border-0">
+          <CardHeader>
+            <CardTitle className="text-xl text-stone-950">
+              Education
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="space-y-4">
+            {education.map((item) => (
+              <div
+                key={`${item.school}-${item.period}`}
+                className="rounded-[18px] bg-white/60 p-4"
+              >
+                <p className="text-xs uppercase tracking-[0.14em] text-stone-500">
+                  {item.period}
+                </p>
+                <h3 className="mt-1 text-base font-semibold text-stone-950">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-stone-600">
+                  {item.school}
+                </p>
+              </div>
             ))}
-          </div>
+          </CardContent>
+        </Card>
 
-          <div className="grid gap-6 lg:grid-cols-2">
-            {moreProjects.map((project, index) => (
-              <CompactProjectCard key={project.title} project={project} index={index} />
+        <Card className="glass-panel rounded-[28px] border-0">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-xl text-stone-950">
+              <Award className="h-5 w-5 text-[#c6633f]" />
+              Training
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="space-y-2">
+            {training.map((item) => (
+              <div
+                key={item}
+                className="rounded-[16px] bg-white/60 px-4 py-3 text-sm text-stone-700"
+              >
+                {item}
+              </div>
             ))}
-          </div>
-        </div>
-      </section>
+          </CardContent>
+        </Card>
 
-      <section id="experience" className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-        <div className="mx-auto max-w-7xl space-y-10">
-          <SectionHeading
-            eyebrow="Experience"
-            title="A growing track record across agency, internship, and freelance product work."
-            description="My path covers React delivery, Flutter builds, and the practical realities of working inside teams, client reviews, and shipping cycles."
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+ <section
+  id="contact"
+  className="scroll-mt-28 px-4 py-20 sm:px-6 lg:px-8 lg:py-28"
+>
+  <div className="mx-auto max-w-3xl space-y-12">
+
+    {/* Heading */}
+    <SectionHeading
+      eyebrow="Contact"
+      title="Let’s build something that feels intentional."
+      description="I’m open to frontend roles, Flutter projects, and freelance work focused on clean UI and strong product thinking."
+    />
+
+    {/* Contact chips (no card blocks) */}
+    <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-stone-700">
+      
+      <a
+        href="mailto:addypearl09@gmail.com"
+        className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 hover:bg-white transition"
+      >
+        <Mail className="h-4 w-4" />
+        Email
+      </a>
+
+      <span className="inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2">
+        <MapPin className="h-4 w-4" />
+        Lagos, Nigeria
+      </span>
+
+      {socialLinks.map((link) => {
+        const Icon = link.icon
+
+        return (
+          <a
+            key={link.label}
+            href={link.href}
+            target={link.href.startsWith("http") ? "_blank" : undefined}
+            rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+            className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 hover:bg-white transition"
+          >
+            <Icon className="h-4 w-4" />
+            {link.label}
+          </a>
+        )
+      })}
+    </div>
+
+    {/* Form (main focus, centered) */}
+    <div className="glass-panel rounded-[34px] p-8 sm:p-10">
+
+      <div className="mb-8 text-center space-y-3">
+        <h3 className="text-3xl font-semibold text-stone-950">
+          Start a conversation
+        </h3>
+        <p className="text-stone-600 leading-7 max-w-xl mx-auto">
+          Tell me what you’re building. I’ll respond with clarity, structure, and next steps.
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+
+        <div className="grid gap-5 sm:grid-cols-2">
+          <Input
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            placeholder="Your name"
+            className="h-12 rounded-2xl border-stone-300 bg-white/80"
           />
 
-          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <div className="space-y-6">
-              {experience.map((item, index) => (
-                <motion.div
-                  key={`${item.company}-${item.period}`}
-                  initial={{ opacity: 0, x: -24 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.5, delay: index * 0.08 }}
-                  className="glass-panel rounded-[30px] p-6"
-                >
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="space-y-2">
-                      <h3 className="text-2xl font-semibold text-stone-950">{item.title}</h3>
-                      <p className="text-base text-stone-700">
-                        {item.company} <span className="text-stone-400">•</span> {item.location}
-                      </p>
-                    </div>
-                    <div className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-xs uppercase tracking-[0.18em] text-stone-600">
-                      <Calendar className="h-4 w-4" />
-                      {item.period}
-                    </div>
-                  </div>
-                  <p className="mt-4 text-sm leading-7 text-stone-600">{item.description}</p>
-                  <div className="mt-5 grid gap-3">
-                    {item.achievements.map((achievement) => (
-                      <div key={achievement} className="flex items-start gap-3 rounded-[22px] bg-white/60 p-4">
-                        <CheckCircle className="mt-0.5 h-4 w-4 text-[#5f8d53]" />
-                        <p className="text-sm leading-6 text-stone-700">{achievement}</p>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="space-y-6">
-              <Card className="glass-panel rounded-[30px] border-0">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-stone-950">Education</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {education.map((item) => (
-                    <div key={`${item.school}-${item.period}`} className="rounded-[22px] bg-white/60 p-5">
-                      <p className="text-sm uppercase tracking-[0.16em] text-stone-500">{item.period}</p>
-                      <h3 className="mt-2 text-lg font-semibold text-stone-950">{item.title}</h3>
-                      <p className="mt-1 text-sm leading-6 text-stone-600">
-                        {item.school} • {item.location}
-                      </p>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-
-              <Card className="glass-panel rounded-[30px] border-0">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3 text-2xl text-stone-950">
-                    <Award className="h-5 w-5 text-[#c6633f]" />
-                    Training
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {training.map((item) => (
-                    <div key={item} className="rounded-[22px] bg-white/60 p-4 text-sm leading-6 text-stone-700">
-                      {item}
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder="Email address"
+            className="h-12 rounded-2xl border-stone-300 bg-white/80"
+          />
         </div>
-      </section>
 
-      <section id="contact" className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.86fr_1.14fr]">
-          <div className="space-y-6">
-            <SectionHeading
-              eyebrow="Contact"
-              title="If the product needs a sharper interface, let’s talk."
-              description="I’m open to frontend roles, Flutter work, freelance builds, and product collaborations that need clean execution and thoughtful UI."
-            />
+        <Textarea
+          id="message"
+          name="message"
+          value={formData.message}
+          onChange={handleInputChange}
+          placeholder="Tell me about your project..."
+          className="min-h-[180px] rounded-2xl border-stone-300 bg-white/80"
+        />
 
-            <Card className="glass-panel rounded-[30px] border-0">
-              <CardContent className="space-y-5 p-6">
-                <div className="flex items-start gap-4">
-                  <div className="rounded-2xl bg-stone-950 p-3 text-stone-50">
-                    <Mail className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.18em] text-stone-500">Email</p>
-                    <a href="mailto:addypearl09@gmail.com" className="mt-1 block text-lg text-stone-950 hover:underline">
-                      addypearl09@gmail.com
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="rounded-2xl bg-stone-950 p-3 text-stone-50">
-                    <MapPin className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.18em] text-stone-500">Location</p>
-                    <p className="mt-1 text-lg text-stone-950">Lagos, Nigeria</p>
-                  </div>
-                </div>
-
-                <div className="rounded-[24px] bg-white/60 p-5">
-                  <p className="text-xs uppercase tracking-[0.2em] text-stone-500">Best fit</p>
-                  <p className="mt-2 text-sm leading-7 text-stone-700">
-                    Product teams that care about polish, performance, and shipping interfaces that users can understand quickly.
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  {socialLinks.map((link) => {
-                    const Icon = link.icon
-
-                    return (
-                      <Button
-                        key={link.label}
-                        asChild
-                        variant="outline"
-                        className="rounded-full border-stone-300 bg-white/70 text-stone-900 hover:bg-white"
-                      >
-                        <a
-                          href={link.href}
-                          target={link.href.startsWith("http") ? "_blank" : undefined}
-                          rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                        >
-                          <Icon />
-                          {link.label}
-                        </a>
-                      </Button>
-                    )
-                  })}
-                </div>
-              </CardContent>
-            </Card>
+        {submitState.message && (
+          <div
+            className={`rounded-2xl px-4 py-3 text-sm ${
+              submitState.type === "success"
+                ? "bg-emerald-50 text-emerald-900"
+                : "bg-rose-50 text-rose-900"
+            }`}
+          >
+            {submitState.message}
           </div>
+        )}
 
-          <Card className="glass-panel rounded-[34px] border-0">
-            <CardHeader className="space-y-3">
-              <CardTitle className="text-3xl text-stone-950">Start a conversation</CardTitle>
-              <CardDescription className="max-w-xl text-base leading-7 text-stone-600">
-                Share the product, the role, or the feature set you need help with. I’ll respond with a clear next step.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid gap-5 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium text-stone-700">
-                      Name
-                    </label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      placeholder="Your name"
-                      className="h-12 rounded-2xl border-stone-300 bg-white/80 text-stone-950 placeholder:text-stone-400 focus-visible:ring-stone-900"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-stone-700">
-                      Email
-                    </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder="you@example.com"
-                      className="h-12 rounded-2xl border-stone-300 bg-white/80 text-stone-950 placeholder:text-stone-400 focus-visible:ring-stone-900"
-                    />
-                  </div>
-                </div>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-stone-500 text-center sm:text-left">
+            Prefer email?{" "}
+            <a
+              href="mailto:addypearl09@gmail.com"
+              className="text-stone-950 underline"
+            >
+              addypearl09@gmail.com
+            </a>
+          </p>
 
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium text-stone-700">
-                    Project details
-                  </label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    placeholder="Tell me what you're building and what kind of help you need."
-                    className="min-h-[180px] rounded-[24px] border-stone-300 bg-white/80 text-stone-950 placeholder:text-stone-400 focus-visible:ring-stone-900"
-                  />
-                </div>
-
-                {submitState.message ? (
-                  <div
-                    className={`flex items-start gap-3 rounded-[22px] border px-4 py-4 text-sm leading-6 ${
-                      submitState.type === "success"
-                        ? "border-emerald-200 bg-emerald-50 text-emerald-900"
-                        : "border-rose-200 bg-rose-50 text-rose-900"
-                    }`}
-                  >
-                    {submitState.type === "success" ? (
-                      <CheckCircle className="mt-0.5 h-4 w-4 flex-none" />
-                    ) : (
-                      <AlertCircle className="mt-0.5 h-4 w-4 flex-none" />
-                    )}
-                    <span>{submitState.message}</span>
-                  </div>
-                ) : null}
-
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-sm leading-6 text-stone-500">
-                    Prefer email? You can also reach me directly at{" "}
-                    <a href="mailto:addypearl09@gmail.com" className="text-stone-950 underline">
-                      addypearl09@gmail.com
-                    </a>
-                    .
-                  </p>
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="rounded-full bg-stone-950 px-6 text-stone-50 hover:bg-stone-800"
-                  >
-                    <Send />
-                    {isSubmitting ? "Sending..." : "Send message"}
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="rounded-full bg-stone-950 px-6 text-white hover:bg-stone-800"
+          >
+            <Send />
+            {isSubmitting ? "Sending..." : "Send message"}
+          </Button>
         </div>
-      </section>
+      </form>
+    </div>
+  </div>
+</section>
+
+
 
       <footer className="px-4 pt-10 sm:px-6 lg:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 border-t border-stone-800/10 py-8 text-sm text-stone-500 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex max-w-[1540px] flex-col gap-4 border-t border-stone-800/10 py-8 text-sm text-stone-500 sm:flex-row sm:items-center sm:justify-between">
           <p>Designed and built for a sharper first impression.</p>
           <p>Oluwadamisi Damilola • Frontend and Mobile App Developer</p>
         </div>
