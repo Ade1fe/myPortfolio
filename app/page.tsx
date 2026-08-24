@@ -57,7 +57,6 @@ type Project = {
   focus: string
   technologies: string[]
   image: string
-  github: string
   demo?: string
   demoLabel?: string
   accent: string
@@ -83,8 +82,7 @@ const projects: Project[] = [
     "Centralized dashboard for monitoring schools, students, and system-wide activity across the platform.",
   technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS", "REST APIs"],
   image: "/bmi-super-admin.png",
-  github: "https://github.com/Ade1fe?tab=repositories",
-  demo: "https://admin.bmilms.ng/",
+  demo: "/",
   demoLabel: "Visit portal",
   accent: "#0f766e",
   gradient:
@@ -99,7 +97,6 @@ const projects: Project[] = [
     "School owners add and manage students, monitor staff, and customize their school's page.",
   technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS", "REST APIs"],
   image: "/bmi-school.png",
-  github: "https://github.com/Ade1fe?tab=repositories",
   demo: "https://school.bmilms.ng/",
   demoLabel: "Visit portal",
   accent: "#295f86",
@@ -115,7 +112,6 @@ const projects: Project[] = [
     "Role-based Flutter experience mirroring the web platform's scheduling and profile management, built for quick access to consultations from a phone.",
   technologies: ["Flutter", "Dart", "Firebase", "REST APIs"],
   image: "/araya-mobile.png",
-  github: "https://github.com/Ade1fe?tab=repositories",
   demo: "https://apps.apple.com/ng/app/quickmed-araya/id6752115182",
   demoLabel: "Visit app",
   accent: "#3b82f6",
@@ -131,7 +127,6 @@ const projects: Project[] = [
     "Students view enrolled courses, take lessons, and complete quizzes in a clean, distraction-free interface.",
   technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS", "REST APIs"],
   image: "/bmi-student.png",
-  github: "https://github.com/Ade1fe?tab=repositories",
   demo: "https://student.bmilms.ng/login",
   demoLabel: "Visit portal",
   accent: "#7a6a2f",
@@ -148,7 +143,6 @@ const projects: Project[] = [
   technologies: ["React", "Next.js", "Chakra UI", "Firebase", "Firestore"],
   image: "/araya-web.png",
    demo: "https://quickmedaraya.com",
-  github: "https://github.com/Ade1fe?tab=repositories",
   accent: "#3b82f6",
   gradient:
     "linear-gradient(135deg, rgba(59, 130, 246, 0.16), rgba(255, 255, 255, 0.82))",
@@ -163,7 +157,6 @@ const projects: Project[] = [
     "Multi-role architecture serving schools (trainer search, scheduling, payments), trainers (profile, calendar, payouts), and government regulators (certification approval, compliance monitoring, regional analytics).",
   technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "REST APIs"],
   image: "/skillkonnect.png",
-  github: "https://github.com/Ade1fe?tab=repositories",
   demo: "https://skillkonnect.ng/",
   demoLabel: "Visit site",
   accent: "#0E4D43",
@@ -178,7 +171,6 @@ const projects: Project[] = [
     focus: "React storefront, Firebase-backed product data, and a cleaner purchase flow.",
     technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
     image: "/jma.png",
-    github: "https://github.com/Ade1fe?tab=repositories",
     demo: "https://jma-rich.vercel.app",
     demoLabel: "Visit site",
     accent: "#c6633f",
@@ -192,7 +184,6 @@ const projects: Project[] = [
     focus: "Flutter mobile flows for approvals, money movement, and activity visibility.",
     technologies: ["Flutter", "Dart", "Firebase", "REST APIs"],
     image: "/approvals.png",
-    github: "https://github.com/Ade1fe?tab=repositories",
     accent: "#295f86",
     gradient: "linear-gradient(135deg, rgba(41, 95, 134, 0.18), rgba(255, 255, 255, 0.8))",
   },
@@ -204,7 +195,6 @@ const projects: Project[] = [
     focus: "Admin UX, scalable layout patterns, and access-controlled business tooling.",
     technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
     image: "/finosell.png",
-    github: "https://github.com/Ade1fe?tab=repositories",
     accent: "#8a5836",
     gradient: "linear-gradient(135deg, rgba(138, 88, 54, 0.16), rgba(255, 255, 255, 0.82))",
   },
@@ -216,7 +206,6 @@ const projects: Project[] = [
     focus: "Flutter delivery UX tuned for urgency, status clarity, and day-to-day reliability.",
     technologies: ["Flutter", "Dart", "Firebase", "REST APIs"],
     image: "/mediswift.png",
-    github: "https://github.com/Ade1fe?tab=repositories",
     accent: "#4d7c6e",
     gradient: "linear-gradient(135deg, rgba(77, 124, 110, 0.18), rgba(255, 255, 255, 0.8))",
   },
@@ -228,7 +217,6 @@ const projects: Project[] = [
     focus: "Responsive learning workflows with role-aware views and Firebase services.",
     technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
     image: "/school.png",
-    github: "https://github.com/Ade1fe?tab=repositories",
     accent: "#7a6a2f",
     gradient: "linear-gradient(135deg, rgba(122, 106, 47, 0.16), rgba(255, 255, 255, 0.82))",
   },
@@ -240,7 +228,6 @@ const projects: Project[] = [
     focus: "React commerce UI with dashboards, cart flow, and polished product discovery.",
     technologies: ["React", "Chakra UI", "Firebase", "React Router", "Firestore"],
     image: "/cut2fit.png",
-    github: "https://github.com/Ade1fe?tab=repositories",
     demo: "https://cut2fit-moda.netlify.app",
     demoLabel: "View live",
     accent: "#b1545f",
@@ -254,7 +241,6 @@ const projects: Project[] = [
     focus: "Search, browse, and detail flows backed by MealDB API integration.",
     technologies: ["Flutter", "Dart", "MealDB API", "Firebase", "GoRouter"],
     image: "/gominefood.png",
-    github: "https://github.com/Ade1fe/gomine-food-2.0",
     demo: "https://drive.google.com/file/d/1G5JwRtUCNM7t87egQcDoGAKM_lwIof3P/view?usp=sharing",
     demoLabel: "Watch demo",
     accent: "#d38a33",
@@ -268,7 +254,6 @@ const projects: Project[] = [
     focus: "Tailwind landing page system with product messaging and waitlist conversion.",
     technologies: ["React", "Tailwind CSS", "JavaScript", "Responsive Design"],
     image: "/kin.png",
-    github: "https://github.com/Ade1fe/kin",
     demo: "https://ki-n.netlify.app",
     demoLabel: "Open site",
     accent: "#6d5ca9",
@@ -282,7 +267,6 @@ const projects: Project[] = [
     focus: "Flutter productivity patterns with Firebase services and state management.",
     technologies: ["Flutter", "Dart", "Firebase", "Provider"],
     image: "/momentum.png",
-    github: "https://github.com/Ade1fe/event_flow",
     demo: "https://drive.google.com/file/d/1r7wMqivM54BqzuQV50bbvhyT8Hc0axNr/view?usp=sharing",
     demoLabel: "Watch demo",
     accent: "#5f8d53",
@@ -517,12 +501,6 @@ function FeaturedProjectCard({ project }: { project: Project }) {
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <Button asChild className="rounded-full bg-stone-950 px-5 text-stone-50 hover:bg-stone-800">
-                <a href={project.github} target="_blank" rel="noreferrer">
-                  <Github />
-                  Code
-                </a>
-              </Button>
               {project.demo ? (
                 <Button
                   asChild
@@ -603,12 +581,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button asChild className="rounded-full bg-stone-950 px-5 text-stone-50 hover:bg-stone-800">
-              <a href={project.github} target="_blank" rel="noreferrer">
-                <Github />
-                Code
-              </a>
-            </Button>
             {project.demo ? (
               <Button
                 asChild
@@ -675,16 +647,6 @@ function CompactProjectCard({ project, index }: { project: Project; index: numbe
               ))}
             </div>
             <div className="flex flex-wrap gap-3">
-              <Button
-                asChild
-                variant="outline"
-                className="rounded-full border-stone-300 bg-white/70 text-stone-900 hover:bg-white"
-              >
-                <a href={project.github} target="_blank" rel="noreferrer">
-                  <Github />
-                  Code
-                </a>
-              </Button>
               {project.demo ? (
                 <Button asChild className="rounded-full bg-stone-950 text-stone-50 hover:bg-stone-800">
                   <a href={project.demo} target="_blank" rel="noreferrer">
@@ -734,15 +696,6 @@ function ProjectGridCard({ project, index }: { project: Project; index: number }
 
           {/* Hover-revealed actions */}
           <div className="absolute inset-x-0 bottom-0 flex translate-y-3 items-center gap-2 p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-            
-          <a    href={project.github}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-stone-900 hover:bg-white"
-              aria-label={`View code for ${project.title}`}
-            >
-              <Github className="h-4 w-4" />
-            </a>
             {project.demo ? (
               
                <a href={project.demo}
