@@ -3,7 +3,7 @@
 import type React from "react"
 
 import Image from "next/image"
-import { motion, useReducedMotion } from "framer-motion"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import {
   AlertCircle,
   ArrowRight,
@@ -74,19 +74,69 @@ const navigation: Array<{ id: SectionId; label: string }> = [
 ]
 
 const projects: Project[] = [
-  {
-  title: "School Super Admin Platform",
+{
+  title: "BMI LMS — Super Admin",
   type: "Education Management System",
   summary:
-    "A centralized super admin system for managing schools, students, and staff with structured control over academic operations and user data.",
+    "The oversight layer of a multi-role learning platform, giving super admins visibility into every school and student on the network.",
   focus:
-    "Role-based admin dashboard for managing users, school records, classes, and system-wide configurations.",
-  technologies: ["React", "Next.js", "Chakra UI", "Firebase", "Firestore"],
-  image: "/super-admin.png",
+    "Centralized dashboard for monitoring schools, students, and system-wide activity across the platform.",
+  technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS", "REST APIs"],
+  image: "/bmi-super-admin.png",
   github: "https://github.com/Ade1fe?tab=repositories",
+  demo: "https://admin.bmilms.ng/",
+  demoLabel: "Visit portal",
   accent: "#0f766e",
   gradient:
     "linear-gradient(135deg, rgba(15, 118, 110, 0.16), rgba(255, 255, 255, 0.82))",
+},
+{
+  title: "BMI LMS — School Portal",
+  type: "Education Management System",
+  summary:
+    "The school owner's workspace for running their institution on the platform — staff, students, and branding, all in one place.",
+  focus:
+    "School owners add and manage students, monitor staff, and customize their school's page.",
+  technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS", "REST APIs"],
+  image: "/bmi-school.png",
+  github: "https://github.com/Ade1fe?tab=repositories",
+  demo: "https://school.bmilms.ng/",
+  demoLabel: "Visit portal",
+  accent: "#295f86",
+  gradient:
+    "linear-gradient(135deg, rgba(41, 95, 134, 0.18), rgba(255, 255, 255, 0.8))",
+},
+{
+  title: "Araya Doctor Mobile",
+  type: "Healthcare Platform",
+  summary:
+    "The mobile companion to Araya Web Doctor, bringing appointment booking, consultations, and healthcare access to patients and doctors on the go.",
+  focus:
+    "Role-based Flutter experience mirroring the web platform's scheduling and profile management, built for quick access to consultations from a phone.",
+  technologies: ["Flutter", "Dart", "Firebase", "REST APIs"],
+  image: "/araya-mobile.png",
+  github: "https://github.com/Ade1fe?tab=repositories",
+  demo: "https://apps.apple.com/ng/app/quickmed-araya/id6752115182",
+  demoLabel: "Visit app",
+  accent: "#3b82f6",
+  gradient:
+    "linear-gradient(135deg, rgba(59, 130, 246, 0.16), rgba(255, 255, 255, 0.82))",
+},
+{
+  title: "BMI LMS — Student Portal",
+  type: "Education Management System",
+  summary:
+    "The learner-facing side of the platform, where students access their courses and track their own progress.",
+  focus:
+    "Students view enrolled courses, take lessons, and complete quizzes in a clean, distraction-free interface.",
+  technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS", "REST APIs"],
+  image: "/bmi-student.png",
+  github: "https://github.com/Ade1fe?tab=repositories",
+  demo: "https://student.bmilms.ng/login",
+  demoLabel: "Visit portal",
+  accent: "#7a6a2f",
+  gradient:
+    "linear-gradient(135deg, rgba(122, 106, 47, 0.16), rgba(255, 255, 255, 0.82))",
 },
   {
   title: "Araya Web Doctor",
@@ -97,10 +147,28 @@ const projects: Project[] = [
     "Role-based system for patients and doctors with scheduling, profile management, and appointment workflows.",
   technologies: ["React", "Next.js", "Chakra UI", "Firebase", "Firestore"],
   image: "/araya-web.png",
+   demo: "https://quickmedaraya.com",
   github: "https://github.com/Ade1fe?tab=repositories",
   accent: "#3b82f6",
   gradient:
     "linear-gradient(135deg, rgba(59, 130, 246, 0.16), rgba(255, 255, 255, 0.82))",
+},
+
+{
+  title: "SkillKonnect",
+  type: "Vocational Marketplace",
+  summary:
+    "A marketplace connecting schools with government-approved vocational trainers — from welding and tailoring to coding — with booking, secure escrow payments, and outcome tracking in one platform.",
+  focus:
+    "Multi-role architecture serving schools (trainer search, scheduling, payments), trainers (profile, calendar, payouts), and government regulators (certification approval, compliance monitoring, regional analytics).",
+  technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "REST APIs"],
+  image: "/skillkonnect.png",
+  github: "https://github.com/Ade1fe?tab=repositories",
+  demo: "https://skillkonnect.ng/",
+  demoLabel: "Visit site",
+  accent: "#0E4D43",
+  gradient:
+    "linear-gradient(135deg, rgba(14, 77, 67, 0.16), rgba(255, 255, 255, 0.82))",
 },
   {
     title: "Jma Couture",
@@ -383,8 +451,9 @@ function SectionHeading({
       <h2 className="section-title max-w-xl text-balance">{title}</h2>
       <p className="section-copy">{description}</p>
     </div>
-  )
-}
+  )}
+
+
 
 function FeaturedProjectCard({ project }: { project: Project }) {
   return (
@@ -632,6 +701,88 @@ function CompactProjectCard({ project, index }: { project: Project; index: numbe
   )
 }
 
+
+function ProjectGridCard({ project, index }: { project: Project; index: number }) {
+  return (
+    <motion.article
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.35, delay: index * 0.03 }}
+      className="h-full"
+    >
+      <Card className="glass-panel group flex h-full flex-col overflow-hidden rounded-[24px] border-0">
+        <div className="relative aspect-[4/3] overflow-hidden bg-stone-200/70">
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+          <div className="absolute left-3 top-3">
+            <Badge
+              variant="outline"
+              className="rounded-full border-white/25 bg-black/30 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-stone-50 backdrop-blur-md"
+            >
+              {project.type}
+            </Badge>
+          </div>
+
+          {/* Hover-revealed actions */}
+          <div className="absolute inset-x-0 bottom-0 flex translate-y-3 items-center gap-2 p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+            
+          <a    href={project.github}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-stone-900 hover:bg-white"
+              aria-label={`View code for ${project.title}`}
+            >
+              <Github className="h-4 w-4" />
+            </a>
+            {project.demo ? (
+              
+               <a href={project.demo}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-9 items-center gap-1.5 rounded-full bg-white/90 px-3 text-xs font-medium text-stone-900 hover:bg-white"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+                {project.demoLabel ?? "Preview"}
+              </a>
+            ) : null}
+          </div>
+        </div>
+
+        <CardContent className="flex flex-1 flex-col gap-2 p-5">
+          <h3 className="font-[family-name:var(--font-display)] text-xl leading-tight text-stone-950">
+            {project.title}
+          </h3>
+          <p className="line-clamp-2 text-sm leading-6 text-stone-600">{project.summary}</p>
+          <div className="mt-auto flex flex-wrap gap-1.5 pt-3">
+            {project.technologies.slice(0, 3).map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full border border-stone-300 bg-stone-100/70 px-2.5 py-0.5 text-[10px] uppercase tracking-[0.1em] text-stone-600"
+              >
+                {tech}
+              </span>
+            ))}
+            {project.technologies.length > 3 ? (
+              <span className="rounded-full border border-stone-300 bg-stone-100/70 px-2.5 py-0.5 text-[10px] text-stone-500">
+                +{project.technologies.length - 3}
+              </span>
+            ) : null}
+          </div>
+        </CardContent>
+      </Card>
+    </motion.article>
+  )
+}
+
 export default function Portfolio() {
   const reduceMotion = useReducedMotion()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -646,6 +797,35 @@ export default function Portfolio() {
     type: "",
     message: "",
   })
+
+  const PROJECTS_PER_PAGE = 6
+
+    const [activeCategory, setActiveCategory] = useState<string>("All")
+const [currentPage, setCurrentPage] = useState(1)
+
+const categories = ["All", ...Array.from(new Set(projects.map((p) => p.type)))]
+const filteredProjects =
+  activeCategory === "All" ? projects : projects.filter((p) => p.type === activeCategory)
+
+const totalPages = Math.max(1, Math.ceil(filteredProjects.length / PROJECTS_PER_PAGE))
+const paginatedProjects = filteredProjects.slice(
+  (currentPage - 1) * PROJECTS_PER_PAGE,
+  currentPage * PROJECTS_PER_PAGE,
+)
+
+const handleCategoryChange = (category: string) => {
+  setActiveCategory(category)
+  setCurrentPage(1)
+}
+
+const goToPage = (page: number) => {
+  setCurrentPage(page)
+  const el = document.getElementById("work")
+  if (el) {
+    const yPosition = el.getBoundingClientRect().top + window.scrollY - 88
+    window.scrollTo({ top: yPosition, behavior: "smooth" })
+  }
+}
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -1286,120 +1466,83 @@ export default function Portfolio() {
         </div>
       </section>
 
-    <section
-  id="work"
-  className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
->
-  <div className="mx-auto max-w-[1540px] space-y-16">
-
-    {/* Header */}
+<section id="work" className="scroll-mt-28 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+  <div className="mx-auto max-w-[1540px] space-y-10">
     <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
       <SectionHeading
         eyebrow="Selected Work"
         title="Projects across fashion, fintech, logistics, education, and productivity."
         description="A collection of real product work focused on usability, structure, and clean execution."
       />
-
       <div className="max-w-sm rounded-[28px] border border-stone-800/10 bg-white/60 p-5 text-sm leading-6 text-stone-600">
-        I focus on building interfaces that feel intentional, fast, and easy to navigate across devices.
+        {projects.length} projects — filter by category, {PROJECTS_PER_PAGE} shown per page.
       </div>
     </div>
 
-    {/* Projects */}
-    <div className="space-y-20">
+    {/* Filter pills */}
+  <div className="-mx-4 px-4 sm:mx-0 sm:px-0">
+  <div className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] sm:flex-wrap sm:overflow-visible sm:pb-0 sm:snap-none [&::-webkit-scrollbar]:hidden">
+    {categories.map((category) => (
+      <button
+        key={category}
+        onClick={() => handleCategoryChange(category)}
+        className={`shrink-0 snap-start rounded-full border px-4 py-2 text-sm transition ${
+          activeCategory === category
+            ? "border-stone-950 bg-stone-950 text-stone-50"
+            : "border-stone-300 bg-white/60 text-stone-600 hover:bg-white hover:text-stone-950"
+        }`}
+      >
+        {category}
+      </button>
+    ))}
+  </div>
+</div>
 
-      {projects.map((project, index) => {
-        const isReversed = index % 2 === 1
+    {/* Grid */}
+    <motion.div layout className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      <AnimatePresence mode="popLayout">
+        {paginatedProjects.map((project, index) => (
+          <ProjectGridCard key={project.title} project={project} index={index} />
+        ))}
+      </AnimatePresence>
+    </motion.div>
 
-        return (
-          <motion.div
-            key={project.title}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.6 }}
-            className={`grid items-center gap-10 lg:grid-cols-2 ${
-              isReversed ? "lg:grid-flow-dense" : ""
+    {/* Pagination */}
+    {totalPages > 1 ? (
+      <div className="flex items-center justify-center gap-2 pt-2">
+        <button
+          onClick={() => goToPage(Math.max(1, currentPage - 1))}
+          disabled={currentPage === 1}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 bg-white/60 text-stone-700 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
+          aria-label="Previous page"
+        >
+          <ArrowRight className="h-4 w-4 rotate-180" />
+        </button>
+
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => goToPage(page)}
+            className={`inline-flex h-10 w-10 items-center justify-center rounded-full text-sm transition ${
+              currentPage === page
+                ? "bg-stone-950 text-stone-50"
+                : "bg-white/60 text-stone-600 hover:bg-white hover:text-stone-950"
             }`}
           >
-            {/* IMAGE */}
-            <div className={isReversed ? "lg:col-start-2" : ""}>
-              <div className="relative aspect-[16/10] overflow-hidden rounded-[30px] glass-panel">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  className="object-cover transition-transform duration-700 hover:scale-[1.04]"
-                  sizes="(min-width: 1280px) 50vw, 100vw"
-                />
+            {page}
+          </button>
+        ))}
 
-                <div
-                  className="absolute bottom-4 right-4 h-12 w-12 rounded-full"
-                  style={{ background: project.gradient }}
-                />
-              </div>
-            </div>
-
-            {/* CONTENT */}
-            <div className={`space-y-5 ${isReversed ? "lg:col-start-1" : ""}`}>
-              <div className="space-y-2">
-                <p className="text-xs uppercase tracking-[0.22em] text-stone-500">
-                  {project.type}
-                </p>
-
-                <h3 className="font-[family-name:var(--font-display)] text-3xl text-stone-950 sm:text-4xl">
-                  {project.title}
-                </h3>
-
-                <p className="text-sm leading-7 text-stone-600">
-                  {project.summary}
-                </p>
-              </div>
-
-              <p className="text-sm leading-7 text-stone-700">
-                {project.focus}
-              </p>
-
-              {/* Tech */}
-              <div className="flex flex-wrap gap-2">
-                {project.technologies.map((tech) => (
-                  <span
-                    key={tech}
-                    className="rounded-full border border-stone-300 bg-white/70 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-stone-700"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-
-              {/* Links */}
-              <div className="flex flex-wrap gap-3 pt-2">
-                <Button asChild className="rounded-full bg-stone-950 text-white hover:bg-stone-800">
-                  <a href={project.github} target="_blank">
-                    <Github />
-                    Code
-                  </a>
-                </Button>
-
-                {project.demo && (
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="rounded-full border-stone-300 bg-white/60 hover:bg-white"
-                  >
-                    <a href={project.demo} target="_blank">
-                      <ExternalLink />
-                      {project.demoLabel ?? "Live"}
-                    </a>
-                  </Button>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        )
-      })}
-
-    </div>
+        <button
+          onClick={() => goToPage(Math.min(totalPages, currentPage + 1))}
+          disabled={currentPage === totalPages}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 bg-white/60 text-stone-700 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
+          aria-label="Next page"
+        >
+          <ArrowRight className="h-4 w-4" />
+        </button>
+      </div>
+    ) : null}
   </div>
 </section>
 
